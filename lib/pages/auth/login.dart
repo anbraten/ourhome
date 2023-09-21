@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:myhome/states/auth.dart';
-import 'package:myhome/routes/router.dart';
-import 'package:myhome/routes/route_utils.dart';
+import 'package:ourhome/states/auth.dart';
+import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/routes/route_utils.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,12 +17,14 @@ class LoginScreen extends StatelessWidget {
           onPressed: () async {
             var usernameOrEmail = 'anton@ju60.de'; // TODO: get from form
             var password = '12345678'; // TODO: get from form
-            var loggedIn =
-                await AuthState.of(context).login(usernameOrEmail, password);
-            if (loggedIn) {
-              AppRouter.router.go(PAGES.home.screenPath);
-            } else {
-              // TODO: show error
+
+            try {
+              await AuthState.of(context).login(usernameOrEmail, password);
+              AppRouter.router.go(PAGES.pinboard.screenPath);
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(e.toString()),
+              ));
             }
           },
         ),

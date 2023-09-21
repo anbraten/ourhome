@@ -1,34 +1,49 @@
 import 'package:flutter/widgets.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
-import 'package:myhome/api.dart';
+import 'package:ourhome/api.dart';
 
 class AuthState {
   RecordAuth? _user;
-  get isSignedIn => _user != null;
+  RecordModel? get user => _user?.record;
+  bool get isSignedIn => _user != null;
+  Api _api;
 
-  AuthState({RecordAuth? user}) : _user = user;
+  AuthState({RecordAuth? user, required Api api})
+      : _user = user,
+        _api = api;
 
   static AuthState of(BuildContext context) {
-    return context.read<AuthState>();
+    var authState = context.read<AuthState?>();
+    if (authState == null) {
+      throw Exception('AuthState not found in context');
+    }
+    return authState;
   }
 
-  static Future<AuthState> load() async {
-    if (pb.authStore.isValid) {
-      var user = await pb.collection('users').authRefresh();
-      return AuthState(user: user);
+  static Future<AuthState> load(Api api) async {
+    if (api.pb.authStore.isValid) {
+      var user = await api.pb.collection('users').authRefresh();
+      return AuthState(user: user, api: api);
     }
-    return Future.value(AuthState());
+
+    return Future.value(AuthState(api: api));
   }
 
   Future<bool> login(String email, String password) async {
-    _user = await pb.collection('users').authWithPassword(email, password);
+    _user = await _api.pb.collection('users').authWithPassword(email, password);
 
     return true;
   }
 
+  Future<bool> logout() async {
+    _api.pb.authStore.clear();
+    _user = null;
+    return true;
+  }
+
   Future<bool> register(String email, name, password) async {
-    await pb.collection('users').create(body: {
+    await _api.pb.collection('users').create(body: {
       name: name,
       email: email,
       password: password,

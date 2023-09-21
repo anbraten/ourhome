@@ -27,7 +27,7 @@ build: ## Build the application
 .PHONY: run
 run: ## Run the application
 	@echo "Running ..."
-	@go run . serve
+	@go run . serve --http 0.0.0.0:8090
 
 deploy: build ## Deploy the application
 	@echo "Deploying ..."

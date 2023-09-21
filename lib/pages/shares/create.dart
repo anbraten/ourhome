@@ -16,8 +16,8 @@ class CreateShareScreen extends StatelessWidget {
           onPressed: () {
             // TODO: create share
 
-            // TODO: redirect to share home
-            AppRouter.router.go(PAGES.home.screenPath);
+            // TODO: redirect to share pinboard
+            AppRouter.router.go(PAGES.pinboard.screenPath);
           },
         ),
       ),
