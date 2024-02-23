@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/components/pinboard_cards/card.dart';
 import 'package:ourhome/components/pinboard_cards/post.dart';
+import 'package:ourhome/routes/route_utils.dart';
+import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -209,8 +211,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              // await AuthState.of(context).logout();
-              // AppRouter.router.go(PAGES.login.screenPath);
+              await AuthState.of(context).logout();
+              AppRouter.router.go(PAGES.login.screenPath);
             },
           ),
         ],
@@ -238,13 +240,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         onPressed: () async {
           var user = AuthState.of(context).user;
           var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
-          // await Api.of(context).pb.collection('posts').create(body: {
-          //   'type': 'expense',
-          //   'share': shareId,
-          //   'author': user?.id,
-          //   'data':
-          //       '{"title": "Putzmittel", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
-          // });
+          await Api.of(context).pb.collection('posts').create(body: {
+            'type': 'expense',
+            'share': shareId,
+            'author': user?.id,
+            'data':
+                '{"title": "Putzmittel", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
+          });
           _showOverLay();
         },
       ),
