@@ -52,49 +52,34 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   GlobalKey globalKey = GlobalKey();
   List<Map> postTypes = [
     {
-      "icon": Icons.home,
+      "icon": Icons.currency_exchange,
       "color": Colors.green,
-      "text": "Horst",
+      "text": "Expense",
     },
     {
-      "icon": Icons.settings,
+      "icon": Icons.task,
       "color": Colors.blueGrey,
-      "text": "Horst",
+      "text": "Task",
     },
     {
-      "icon": Icons.location_city,
+      "icon": Icons.note,
       "color": Colors.purple,
-      "text": "Horst",
+      "text": "Note",
     },
     {
-      "icon": Icons.home,
+      "icon": Icons.poll,
       "color": Colors.green,
-      "text": "Horst",
+      "text": "Poll",
     },
     {
-      "icon": Icons.settings,
+      "icon": Icons.image,
       "color": Colors.blueGrey,
-      "text": "Horst",
+      "text": "Image",
     },
     {
-      "icon": Icons.location_city,
+      "icon": Icons.shopping_cart,
       "color": Colors.purple,
-      "text": "Horst",
-    },
-    {
-      "icon": Icons.home,
-      "color": Colors.green,
-      "text": "Horst",
-    },
-    {
-      "icon": Icons.settings,
-      "color": Colors.blueGrey,
-      "text": "Horst",
-    },
-    {
-      "icon": Icons.location_city,
-      "color": Colors.purple,
-      "text": "Horst",
+      "text": "Shopping list",
     },
   ];
 
@@ -124,12 +109,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               child: GridView.count(
                 crossAxisCount: 3,
                 padding: EdgeInsets.zero,
-                shrinkWrap: false,
+                shrinkWrap: true,
                 children: List.from(postTypes)
                     .map(
                       (e) => TextButton(
-                        onPressed: () {
-                          animationController!.reverse();
+                        onPressed: () async {
+                          // TODO: run action for specific postType
+                          var user = AuthState.of(context).user;
+                          var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
+                          await Api.of(context)
+                              .pb
+                              .collection('posts')
+                              .create(body: {
+                            'type': 'expense',
+                            'share': shareId,
+                            'author': user?.id,
+                            'data':
+                                '{"title": "Cleaning materials", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
+                          });
+
+                          await animationController!.reverse();
                           overlayEntry!.remove();
                         },
                         child: Column(
@@ -146,12 +145,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 size: 32,
                               ),
                             ),
-                            const Text(
-                              "Horst",
+                            Text(
+                              e["text"],
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
                               ),
                             ),
                           ],
@@ -198,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
     animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
         parent: animationController!,
-        curve: Interval(0.2, 1.0, curve: Curves.ease)));
+        curve: const Interval(0.2, 1.0, curve: Curves.ease)));
   }
 
   @override
@@ -235,20 +234,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
         key: globalKey,
         onPressed: () async {
-          var user = AuthState.of(context).user;
-          var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
-          await Api.of(context).pb.collection('posts').create(body: {
-            'type': 'expense',
-            'share': shareId,
-            'author': user?.id,
-            'data':
-                '{"title": "Putzmittel", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
-          });
           _showOverLay();
         },
+        child: const Icon(Icons.add),
       ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -260,15 +250,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.push_pin),
-            label: 'Pinnwand',
+            label: 'Pinboard',
           ),
           NavigationDestination(
             icon: Icon(Icons.money),
-            label: 'Finanzen',
+            label: 'Finances',
           ),
           NavigationDestination(
             icon: Icon(Icons.settings),
-            label: 'Einstellungen',
+            label: 'Settings',
           ),
         ],
       ),
