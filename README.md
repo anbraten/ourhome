@@ -1,21 +1,28 @@
-# myhome
+# ourhome
 
 Manage your WG with this app.
 
 ## Features
 
+- [ ] expenses
 - [ ] tasks (cleaning)
 - [ ] shopping list
-- [ ] expenses
 - [ ] pinboard
 
 ## TODO
 
-- [ ] register
 - [ ] login
-- [ ] create wg
-- [ ] invite user to wg
-- [ ] pinboard
+- [x] check login status and redirect accordingly
+- [ ] register new user
+- [ ] don't block for initial api load?
+- [ ] create home
+- [ ] invite user to home
+- [x] pinboard
+  - [x] create post
+  - [ ] delete post
+  - [ ] add post types
+    - [ ] expense
+    - [ ] task
 - [ ] expenses
 
 ## Getting Started

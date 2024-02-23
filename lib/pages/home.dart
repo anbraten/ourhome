@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
@@ -44,6 +44,136 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  AnimationController? animationController;
+  Animation<double>? animation;
+  OverlayEntry? overlayEntry;
+  GlobalKey globalKey = GlobalKey();
+  List<Map> postTypes = [
+    {
+      "icon": Icons.home,
+      "color": Colors.green,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.settings,
+      "color": Colors.blueGrey,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.location_city,
+      "color": Colors.purple,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.home,
+      "color": Colors.green,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.settings,
+      "color": Colors.blueGrey,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.location_city,
+      "color": Colors.purple,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.home,
+      "color": Colors.green,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.settings,
+      "color": Colors.blueGrey,
+      "text": "Horst",
+    },
+    {
+      "icon": Icons.location_city,
+      "color": Colors.purple,
+      "text": "Horst",
+    },
+  ];
+
+  _showOverLay() async {
+    RenderBox? renderBox =
+        globalKey.currentContext!.findRenderObject() as RenderBox?;
+    Offset offset = renderBox!.localToGlobal(Offset.zero);
+
+    OverlayState? overlayState = Overlay.of(context);
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        bottom: screenHeight - offset.dy - renderBox.size.height,
+        height: screenHeight * 0.3,
+        left: 0,
+        width: screenWidth,
+        child: ScaleTransition(
+          scale: animation!,
+          child: Material(
+            type: MaterialType.transparency,
+            child: Card(
+              shadowColor: Colors.transparent,
+              color: Colors.grey,
+              child: GridView.count(
+                crossAxisCount: 3,
+                padding: EdgeInsets.zero,
+                shrinkWrap: false,
+                children: List.from(postTypes)
+                    .map(
+                      (e) => TextButton(
+                        onPressed: () {
+                          animationController!.reverse();
+                          overlayEntry!.remove();
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                color: e["color"] as Color?,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Icon(
+                                e["icon"] as IconData?,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                            ),
+                            const Text(
+                              "Horst",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    animationController!.addListener(() {
+      overlayState.setState(() {});
+    });
+    animationController!.forward();
+    overlayState.insert(overlayEntry!);
+
+    // await Future.delayed(const Duration(seconds: 5))
+    //     .whenComplete(() => animationController!.reverse())
+    //     .whenComplete(() => overlayEntry!.remove());
+  }
+
   @override
   initState() {
     super.initState();
@@ -61,6 +191,12 @@ class _HomeScreenState extends State<HomeScreen> {
         _deletePost(Post.fromRecordModel(event.record!));
       }
     });
+
+    animationController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+        parent: animationController!,
+        curve: Interval(0.2, 1.0, curve: Curves.ease)));
   }
 
   @override
@@ -68,6 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Our Home'),
+        backgroundColor: Colors.greenAccent,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -83,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: RefreshIndicator(
           key: _refreshIndicatorKey,
           color: Colors.white,
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.greenAccent,
           strokeWidth: 2.0,
           onRefresh: () => _loadPosts(),
           child: ListView.builder(
@@ -96,18 +233,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add),
-          onPressed: () async {
-            var user = AuthState.of(context).user;
-            var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
-            await Api.of(context).pb.collection('posts').create(body: {
-              'type': 'expense',
-              'share': shareId,
-              'author': user?.id,
-              'data':
-                  '{"title": "Putzmittel", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
-            });
-          }),
+        child: const Icon(Icons.add),
+        key: globalKey,
+        onPressed: () async {
+          var user = AuthState.of(context).user;
+          var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
+          // await Api.of(context).pb.collection('posts').create(body: {
+          //   'type': 'expense',
+          //   'share': shareId,
+          //   'author': user?.id,
+          //   'data':
+          //       '{"title": "Putzmittel", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
+          // });
+          _showOverLay();
+        },
+      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           // setState(() {

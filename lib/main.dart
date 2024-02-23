@@ -39,6 +39,9 @@ class MyApp extends StatelessWidget {
                   routerConfig: AppRouter.router,
                   title: 'Our home',
                   debugShowCheckedModeBanner: false,
+                  theme: ThemeData(
+                    useMaterial3: true,
+                  ),
                   // theme: ThemeData(
                   //   primarySwatch: Colors.blue,
                   //   scaffoldBackgroundColor: Colors.grey.shade200,

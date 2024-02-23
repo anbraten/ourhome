@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/components/pinboard_cards/post.dart';
+import 'package:ourhome/components/post_type.dart';
 
 class ExpenseData {
   final String title;
@@ -61,3 +62,14 @@ class ExpenseCard extends StatelessWidget {
     );
   }
 }
+
+// class Expense extends PostType {
+//   Expense()
+//       : super(
+//           type: 'expense',
+//           card: ExpenseCard.fromPost,
+//           icon: Icons.attach_money,
+//           color: Colors.greenAccent,
+//           text: 'Expense',
+//         );
+// }
