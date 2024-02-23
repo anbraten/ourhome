@@ -17,10 +17,7 @@ class Api {
       initial: prefs.getString('pb_auth'),
     );
 
-    // TODO: set the base url
-    // const host = "127.0.0.1";
-    const host = "192.168.0.184";
-    var api = PocketBase('http://$host:8090', authStore: store);
+    var api = PocketBase('https://ourhome.ju60.de', authStore: store);
     return Api(api: api);
   }
 

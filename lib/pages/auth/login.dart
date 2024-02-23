@@ -15,7 +15,7 @@ class LoginScreen extends StatelessWidget {
             'Login',
           ),
           onPressed: () async {
-            var usernameOrEmail = 'anton@ju60.de'; // TODO: get from form
+            var usernameOrEmail = 'toni@test.com'; // TODO: get from form
             var password = '12345678'; // TODO: get from form
 
             try {
