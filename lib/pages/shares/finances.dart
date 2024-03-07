@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
+import 'package:ourhome/components/expense/pinboard_card.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:pocketbase/pocketbase.dart';
@@ -13,6 +14,8 @@ class ShareFinancesScreen extends StatefulWidget {
 }
 
 class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   Map<String, Post> posts = {};
 
   _loadPosts() async {
@@ -67,6 +70,7 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
       bodyBuilder: (share) => Padding(
         padding: const EdgeInsets.all(1),
         child: RefreshIndicator(
+          key: _refreshIndicatorKey,
           color: Colors.white,
           backgroundColor: Colors.greenAccent,
           strokeWidth: 2.0,
@@ -75,7 +79,57 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
             itemCount: share.members.length,
             itemBuilder: (context, index) {
               var member = share.members.elementAt(index);
-              return Text(member);
+
+              var expenses = posts.values
+                  .where((post) {
+                    return post.type == 'expense';
+                  })
+                  .toList()
+                  .map((p) => ExpenseData.fromJson(p.data));
+
+              var memberExpenses = expenses.where((expense) {
+                return expense.paidBy != member;
+              }).toList();
+
+              var toPay = memberExpenses.fold(0.0, (prev, expense) {
+                return prev - (expense.amount / expense.paidFor.length);
+              });
+
+              return Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FutureBuilder(
+                    future: () async {
+                      return Api.of(context)
+                          .pb
+                          .collection('users')
+                          .getOne(member);
+                    }(),
+                    builder: (_, data) {
+                      if (data.data == null) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      final member = data.data!;
+                      final avatarUrl = member.getStringValue("avatar") != ""
+                          ? "https://ourhome.ju60.de/api/files/${member.collectionId}/${member.id}/${member.getStringValue("avatar")}"
+                          : "";
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Image.network(avatarUrl,
+                              width: 50, height: 50, fit: BoxFit.cover),
+                          Text(member.getStringValue("name"),
+                              style: const TextStyle(fontSize: 20)),
+                          Text("${toPay.toString()}€",
+                              style: const TextStyle(fontSize: 20)),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              );
             },
           ),
         ),
