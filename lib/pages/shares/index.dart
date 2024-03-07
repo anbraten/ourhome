@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/states/auth.dart';
 import 'package:ourhome/types/share.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -69,6 +70,15 @@ class _SharesListState extends State<SharesListScreen>
       appBar: AppBar(
         title: const Text('Shares'),
         backgroundColor: Colors.greenAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await AuthState.of(context).logout();
+              AppRouter.router.go('/auth/login');
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(1),

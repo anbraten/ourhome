@@ -26,6 +26,11 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child:
+                    Text("Login to Our Home", style: TextStyle(fontSize: 24)),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 child: TextFormField(
@@ -64,10 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     onPressed: () async {
                       if (!_formKey.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('Please fill in the form')),
-                        );
                         return;
                       }
 
@@ -83,6 +84,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  const Text("Don't have an account?"),
+                  TextButton(
+                    onPressed: () {
+                      AppRouter.router.go('/auth/register');
+                    },
+                    child: const Text('Register'),
+                  ),
+                ]),
               ),
             ],
           ),

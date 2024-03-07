@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/home.dart';
 import 'package:ourhome/pages/auth/login.dart';
@@ -30,6 +31,10 @@ class AppRouter {
         path: '/',
         redirect: (_, __) async =>
             '/shares/q3wx3fdcvo8zw1q', // TODO: get user's last opened share
+      ),
+      GoRoute(
+        path: '/auth/register',
+        builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
         path: '/auth/login',
