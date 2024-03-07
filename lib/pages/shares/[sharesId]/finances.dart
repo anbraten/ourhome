@@ -19,7 +19,11 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
   Map<String, Post> posts = {};
 
   _loadPosts() async {
-    var response = await Api.of(context).pb.collection('posts').getList();
+    var response = await Api.of(context)
+        .pb
+        .collection('posts')
+        .getList(filter: "share = '${widget.shareId}'");
+
     var data = response.items;
     Map<String, Post> posts = {};
 
@@ -54,11 +58,16 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
       if (event.record == null) {
         throw Exception('Record is null');
       }
+      final post = Post.fromRecordModel(event.record!);
+      if (post.share != widget.shareId) {
+        return;
+      }
+
       if (event.action == 'create' || event.action == 'update') {
-        _setPost(Post.fromRecordModel(event.record!));
+        _setPost(post);
       }
       if (event.action == 'delete') {
-        _deletePost(Post.fromRecordModel(event.record!));
+        _deletePost(post);
       }
     });
   }
@@ -110,7 +119,7 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
                       Widget avatar = const Icon(Icons.person, size: 50);
 
                       if (member != null &&
-                          member.getStringValue("avatar") == "") {
+                          member.getStringValue("avatar") != "") {
                         final avatarUrl =
                             "${Api.url}/api/files/${member.collectionId}/${member.id}/${member.getStringValue("avatar")}";
                         avatar = Image.network(avatarUrl,

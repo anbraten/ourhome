@@ -72,6 +72,12 @@ class _SharesListState extends State<SharesListScreen>
         backgroundColor: Colors.greenAccent,
         actions: [
           IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              AppRouter.router.go('/shares/create');
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await AuthState.of(context).logout();

@@ -3,10 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/auth/login.dart';
-import 'package:ourhome/pages/shares/finances.dart';
+import 'package:ourhome/pages/shares/create.dart';
+import 'package:ourhome/pages/shares/%5BsharesId%5D/finances.dart';
 import 'package:ourhome/pages/shares/index.dart';
-import 'package:ourhome/pages/shares/settings/index.dart';
-import 'package:ourhome/pages/shares/share.dart';
+import 'package:ourhome/pages/shares/%5BsharesId%5D/settings/index.dart';
+import 'package:ourhome/pages/shares/%5BsharesId%5D/index.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,7 +62,7 @@ class AppRouter {
         routes: [
           GoRoute(
             path: 'create',
-            builder: (context, state) => const NotFoundScreen(),
+            builder: (context, state) => const CreateShareScreen(),
           ),
           GoRoute(
               path: ':shareId',

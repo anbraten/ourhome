@@ -75,7 +75,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: Colors.teal,
                       ),
                       child: const Text(
-                        'Login', style: TextStyle(fontSize: 16, color: Colors.white),
+                        'Login',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       onPressed: () async {
                         if (!_formKey.currentState!.validate()) {
@@ -106,7 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             AppRouter.router.replace('/auth/register');
                           },
-                          child: const Text('Register', style: TextStyle(color: Colors.teal)),
+                          child: const Text('Register',
+                              style: TextStyle(color: Colors.greenAccent)),
                         ),
                       ]),
                 ),

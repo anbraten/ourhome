@@ -3,8 +3,6 @@ import 'package:ourhome/api.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
 import 'package:ourhome/components/pinboard_cards/card.dart';
 import 'package:ourhome/types/post.dart';
-import 'package:ourhome/routes/router.dart';
-import 'package:ourhome/states/auth.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:ourhome/components/expense/create.dart';
 
@@ -24,7 +22,10 @@ class _ShareScreenState extends State<ShareScreen>
   Map<String, Post> posts = {};
 
   _loadPosts() async {
-    var response = await Api.of(context).pb.collection('posts').getList();
+    var response = await Api.of(context)
+        .pb
+        .collection('posts')
+        .getList(filter: "share = '${widget.shareId}'");
     var data = response.items;
     Map<String, Post> posts = {};
 

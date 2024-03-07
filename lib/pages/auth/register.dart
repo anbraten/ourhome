@@ -31,14 +31,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  child:
-                  Column(
+                  child: Column(
                     children: [
                       Text("Create your account",
                           style: TextStyle(fontSize: 24)),
-                      Text("we will not charge you anything ... yet 😉", style: TextStyle(
-                        fontSize: 16,
-                      ),),
+                      Text(
+                        "we will not charge you anything ... yet 😉",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -166,7 +168,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onPressed: () {
                             AppRouter.router.replace('/auth/login');
                           },
-                          child: const Text('Login', style: TextStyle(color: Colors.teal),),
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(color: Colors.greenAccent),
+                          ),
                         ),
                       ]),
                 ),
