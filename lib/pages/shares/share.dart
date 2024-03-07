@@ -2,23 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 
 import 'package:ourhome/components/pinboard_cards/card.dart';
-import 'package:ourhome/components/pinboard_cards/post.dart';
+import 'package:ourhome/types/post.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/auth.dart';
+import 'package:ourhome/types/share.dart';
 import 'package:pocketbase/pocketbase.dart';
+import 'package:ourhome/components/expense/create.dart';
+import 'package:ourhome/helpers/post_types.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../components/expense/create.dart';
-import '../helpers/post_types.dart';
-
-class HomeScreen extends StatefulWidget {
+class ShareScreen extends StatefulWidget {
   final String shareId;
-  const HomeScreen({super.key, required this.shareId});
+  const ShareScreen({super.key, required this.shareId});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<ShareScreen> createState() => _ShareScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+class _ShareScreenState extends State<ShareScreen>
+    with TickerProviderStateMixin {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
@@ -175,74 +177,95 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return const CreateEntry();
+        return CreateEntry(shareId: widget.shareId);
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Our Home'),
-        backgroundColor: Colors.greenAccent,
-        actions: [
-          IconButton(
-            key: globalKey,
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              _showCreateDialog(context);
+    return FutureBuilder<Share>(
+      future: () async {
+        var response = await Api.of(context)
+            .pb
+            .collection('shares')
+            .getOne(widget.shareId);
+
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('lastOpenedShare', response.id);
+
+        return Share.fromRecordModel(response);
+      }(),
+      builder: (_, data) {
+        final share = data.data;
+        if (share == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(share.name),
+            backgroundColor: Colors.greenAccent,
+            actions: [
+              IconButton(
+                key: globalKey,
+                icon: const Icon(Icons.add),
+                onPressed: () {
+                  _showCreateDialog(context);
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () async {
+                  await AuthState.of(context).logout();
+                  AppRouter.router.go('/auth/login');
+                },
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(1),
+            child: RefreshIndicator(
+              key: _refreshIndicatorKey,
+              color: Colors.white,
+              backgroundColor: Colors.greenAccent,
+              strokeWidth: 2.0,
+              onRefresh: () => _loadPosts(),
+              child: ListView.builder(
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  var post = posts.values.elementAt(index);
+                  return PinboardCard(post: post);
+                },
+              ),
+            ),
+          ),
+          bottomNavigationBar: NavigationBar(
+            onDestinationSelected: (int index) {
+              // setState(() {
+              //   currentPageIndex = index;
+              // });
             },
+            // selectedIndex: currentPageIndex,
+            destinations: const [
+              NavigationDestination(
+                icon: Icon(Icons.push_pin),
+                label: 'Pinboard',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.money),
+                label: 'Finances',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.settings),
+                label: 'Settings',
+              ),
+            ],
           ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await AuthState.of(context).logout();
-              AppRouter.router.go('/auth/login');
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(1),
-        child: RefreshIndicator(
-          key: _refreshIndicatorKey,
-          color: Colors.white,
-          backgroundColor: Colors.greenAccent,
-          strokeWidth: 2.0,
-          onRefresh: () => _loadPosts(),
-          child: ListView.builder(
-            itemCount: posts.length,
-            itemBuilder: (context, index) {
-              var post = posts.values.elementAt(index);
-              return PinboardCard(post: post);
-            },
-          ),
-        ),
-      ),
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (int index) {
-          // setState(() {
-          //   currentPageIndex = index;
-          // });
-        },
-        // selectedIndex: currentPageIndex,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.push_pin),
-            label: 'Pinboard',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.money),
-            label: 'Finances',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
-

@@ -16,7 +16,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    emailController.text = "toni@test.com"; // TODO: remove
     return Scaffold(
       body: Form(
         key: _formKey,

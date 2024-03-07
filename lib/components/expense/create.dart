@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/helpers/post_types.dart';
-
-import '../../api.dart';
-import '../../states/auth.dart';
+import 'package:ourhome/api.dart';
+import 'package:ourhome/states/auth.dart';
 
 class CreateEntry extends StatefulWidget {
-  const CreateEntry({super.key});
+  final String shareId;
+  const CreateEntry({super.key, required this.shareId});
 
   @override
   State<CreateEntry> createState() => _CreateEntryState();
 }
 
-Column _createExpenseForm(_selectedPostType, Function resetPostType, context) {
+Column _createExpenseForm(
+    String shareId, _selectedPostType, Function resetPostType, context) {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   final currencyController = TextEditingController();
   final paidByController = TextEditingController();
   final paidForController = TextEditingController();
-
 
   return Column(
     children: [
@@ -25,9 +25,8 @@ Column _createExpenseForm(_selectedPostType, Function resetPostType, context) {
         'Add a new Expense',
         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
       ),
-      Column(
-
-        children: [TextFormField(
+      Column(children: [
+        TextFormField(
           decoration: const InputDecoration(labelText: 'Title'),
           controller: titleController,
         ),
@@ -46,8 +45,8 @@ Column _createExpenseForm(_selectedPostType, Function resetPostType, context) {
         TextFormField(
           decoration: const InputDecoration(labelText: 'Paid for'),
           controller: paidForController,
-        ),]
-      ),
+        ),
+      ]),
       const SizedBox(height: 20),
       Row(
         children: [
@@ -62,16 +61,12 @@ Column _createExpenseForm(_selectedPostType, Function resetPostType, context) {
               onPressed: () async {
                 // TODO: run action for specific postType
                 var user = AuthState.of(context).user;
-                var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
-                await Api.of(context)
-                    .pb
-                    .collection('posts')
-                    .create(body: {
+                await Api.of(context).pb.collection('posts').create(body: {
                   'type': 'expense',
                   'share': shareId,
                   'author': user?.id,
                   'data':
-                  '{"title": "${titleController.text}", "date": "${DateTime.now().toIso8601String()}", "amount": ${amountController.text}, "currency": "${currencyController.text}", "paidBy": "${paidByController.text}", "paidFor": ["${paidForController.text}"]}',
+                      '{"title": "${titleController.text}", "date": "${DateTime.now().toIso8601String()}", "amount": ${amountController.text}, "currency": "${currencyController.text}", "paidBy": "${paidByController.text}", "paidFor": ["${paidForController.text}"]}',
                 });
                 Navigator.of(context).pop();
               },
@@ -129,7 +124,7 @@ class _CreateEntryState extends State<CreateEntry> {
                       .toList(),
                 ],
                 if (_selectedPostType == "Expense")
-                  _createExpenseForm(_selectedPostType, () {
+                  _createExpenseForm(widget.shareId, _selectedPostType, () {
                     setState(() {
                       _selectedPostType = null;
                     });

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../routes/router.dart';
+import 'package:ourhome/routes/router.dart';
 
 class CreateShareScreen extends StatelessWidget {
   const CreateShareScreen({Key? key}) : super(key: key);

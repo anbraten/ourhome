@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
-import 'package:ourhome/pages/home.dart';
 import 'package:ourhome/pages/auth/login.dart';
 import 'package:ourhome/pages/shares/index.dart';
+import 'package:ourhome/pages/shares/share.dart';
 import 'package:ourhome/states/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppRouter {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -32,10 +33,18 @@ class AppRouter {
     },
     routes: [
       GoRoute(
-        path: '/',
-        redirect: (_, __) async =>
-            '/shares/q3wx3fdcvo8zw1q', // TODO: get user's last opened share
-      ),
+          path: '/',
+          redirect: (_, __) async {
+            final SharedPreferences prefs =
+                await SharedPreferences.getInstance();
+
+            final lastOpenedShare = prefs.getString('lastOpenedShare');
+            if (lastOpenedShare != null) {
+              return '/shares/$lastOpenedShare';
+            }
+
+            return '/shares';
+          }),
       GoRoute(
         path: '/auth/register',
         builder: (context, state) => const RegisterScreen(),
@@ -55,7 +64,7 @@ class AppRouter {
           GoRoute(
             path: ':shareId',
             builder: (context, state) =>
-                HomeScreen(shareId: state.pathParameters['shareId']!),
+                ShareScreen(shareId: state.pathParameters['shareId']!),
           ),
         ],
       ),

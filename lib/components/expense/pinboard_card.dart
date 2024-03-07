@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/components/pinboard_cards/post.dart';
+import 'package:ourhome/types/post.dart';
 
 class ExpenseData {
   final String title;
