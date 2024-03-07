@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ourhome/api.dart';
+
 import 'package:ourhome/components/pinboard_cards/card.dart';
 import 'package:ourhome/components/pinboard_cards/post.dart';
-import 'package:ourhome/routes/route_utils.dart';
-import 'package:ourhome/routes/router.dart';
+
 import 'package:ourhome/states/auth.dart';
 import 'package:pocketbase/pocketbase.dart';
+
+import '../components/expense/create.dart';
+import '../helpers/post_types.dart';
+import '../routes/route_utils.dart';
+import '../routes/router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,38 +56,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Animation<double>? animation;
   OverlayEntry? overlayEntry;
   GlobalKey globalKey = GlobalKey();
-  List<Map> postTypes = [
-    {
-      "icon": Icons.currency_exchange,
-      "color": Colors.green,
-      "text": "Expense",
-    },
-    {
-      "icon": Icons.task,
-      "color": Colors.blueGrey,
-      "text": "Task",
-    },
-    {
-      "icon": Icons.note,
-      "color": Colors.purple,
-      "text": "Note",
-    },
-    {
-      "icon": Icons.poll,
-      "color": Colors.green,
-      "text": "Poll",
-    },
-    {
-      "icon": Icons.image,
-      "color": Colors.blueGrey,
-      "text": "Image",
-    },
-    {
-      "icon": Icons.shopping_cart,
-      "color": Colors.purple,
-      "text": "Shopping list",
-    },
-  ];
 
   _showOverLay() async {
     RenderBox? renderBox =
@@ -200,6 +174,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         curve: const Interval(0.2, 1.0, curve: Curves.ease)));
   }
 
+  void _showCreateDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const CreateEntry();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,6 +190,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         title: const Text('Our Home'),
         backgroundColor: Colors.greenAccent,
         actions: [
+          IconButton(
+            key: globalKey,
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              _showCreateDialog(context);
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
@@ -233,13 +223,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        key: globalKey,
-        onPressed: () async {
-          _showOverLay();
-        },
-        child: const Icon(Icons.add),
-      ),
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
           // setState(() {
@@ -265,3 +248,4 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 }
+
