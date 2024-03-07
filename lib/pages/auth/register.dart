@@ -31,8 +31,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                  child: Text("Create your account",
-                      style: TextStyle(fontSize: 24)),
+                  child:
+                  Column(
+                    children: [
+                      Text("Create your account",
+                          style: TextStyle(fontSize: 24)),
+                      Text("we will not charge you anything ... yet 😉", style: TextStyle(
+                        fontSize: 16,
+                      ),),
+                    ],
+                  ),
                 ),
                 Padding(
                   padding:
@@ -108,8 +116,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(10),
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: Colors.teal,
+                      ),
                       child: const Text(
                         'Register',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       onPressed: () async {
                         if (!_formKey.currentState!.validate()) {
@@ -152,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onPressed: () {
                             AppRouter.router.replace('/auth/login');
                           },
-                          child: const Text('Login'),
+                          child: const Text('Login', style: TextStyle(color: Colors.teal),),
                         ),
                       ]),
                 ),

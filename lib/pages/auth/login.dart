@@ -69,8 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: Center(
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.all(10),
+                        minimumSize: const Size(double.infinity, 50),
+                        backgroundColor: Colors.teal,
+                      ),
                       child: const Text(
-                        'Login',
+                        'Login', style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                       onPressed: () async {
                         if (!_formKey.currentState!.validate()) {
@@ -101,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             AppRouter.router.replace('/auth/register');
                           },
-                          child: const Text('Register'),
+                          child: const Text('Register', style: TextStyle(color: Colors.teal)),
                         ),
                       ]),
                 ),
