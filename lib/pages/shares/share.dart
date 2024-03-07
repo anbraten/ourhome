@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 
@@ -184,6 +186,8 @@ class _ShareScreenState extends State<ShareScreen>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return FutureBuilder<Share>(
       future: () async {
         var response = await Api.of(context)
@@ -237,7 +241,36 @@ class _ShareScreenState extends State<ShareScreen>
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
                   var post = posts.values.elementAt(index);
-                  return PinboardCard(post: post);
+
+                  return GestureDetector(
+                    onLongPressStart: (LongPressStartDetails details) {
+                      showMenu(
+                        context: context,
+                        position: RelativeRect.fromLTRB(
+                          details.globalPosition.dx,
+                          details.globalPosition.dy,
+                          size.width - details.globalPosition.dx,
+                          size.height - details.globalPosition.dy,
+                        ),
+                        items: <PopupMenuEntry>[
+                          PopupMenuItem(
+                            value: index,
+                            onTap: () async {
+                              await Api.of(context)
+                                  .pb
+                                  .collection('posts')
+                                  .delete(post.id);
+                            },
+                            child: const ListTile(
+                              leading: Icon(Icons.delete),
+                              title: Text('Delete'),
+                            ),
+                          )
+                        ],
+                      );
+                    },
+                    child: PinboardCard(post: post),
+                  );
                 },
               ),
             ),
