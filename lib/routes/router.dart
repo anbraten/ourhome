@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ourhome/routes/route_utils.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/home.dart';
 import 'package:ourhome/pages/auth/login.dart';
+import 'package:ourhome/pages/shares/index.dart';
 import 'package:ourhome/states/auth.dart';
 
 class AppRouter {
@@ -15,37 +15,38 @@ class AppRouter {
     redirect: (BuildContext context, GoRouterState state) {
       bool isSignedIn = AuthState.of(context).isSignedIn;
 
-      if (!isSignedIn && state.fullPath != PAGES.login.screenPath) {
-        return PAGES.login.screenPath;
+      if (!isSignedIn && state.fullPath != '/auth/login') {
+        return '/auth/login';
       }
 
-      if (isSignedIn && state.fullPath == PAGES.login.screenPath) {
-        return PAGES.pinboard.screenPath;
+      if (isSignedIn && state.fullPath == '/auth/login') {
+        return '/';
       }
 
       return null;
     },
     routes: [
-      ShellRoute(
-        builder: (
-          BuildContext context,
-          GoRouterState state,
-          Widget child,
-        ) {
-          if (state.fullPath == PAGES.login.screenPath) {
-            return child;
-          }
-
-          return child;
-        },
+      GoRoute(
+        path: '/',
+        redirect: (_, __) async =>
+            '/shares/q3wx3fdcvo8zw1q', // TODO: get user's last opened share
+      ),
+      GoRoute(
+        path: '/auth/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/shares',
+        builder: (context, state) => const SharesListScreen(),
         routes: [
           GoRoute(
-            path: PAGES.pinboard.screenPath,
-            builder: (context, state) => const HomeScreen(),
+            path: 'create',
+            builder: (context, state) => const NotFoundScreen(),
           ),
           GoRoute(
-            path: PAGES.login.screenPath,
-            builder: (context, state) => const LoginScreen(),
+            path: ':shareId',
+            builder: (context, state) =>
+                HomeScreen(shareId: state.pathParameters['shareId']!),
           ),
         ],
       ),

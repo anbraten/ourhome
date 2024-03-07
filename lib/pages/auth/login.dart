@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:ourhome/routes/router.dart';
-import 'package:ourhome/routes/route_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -75,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       try {
                         await AuthState.of(context).login(
                             emailController.text, passwordController.text);
-                        AppRouter.router.go(PAGES.pinboard.screenPath);
+                        AppRouter.router.go('/');
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(e.toString()),
