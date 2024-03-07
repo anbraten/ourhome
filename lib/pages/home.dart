@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ourhome/api.dart';
 
 import 'package:ourhome/components/pinboard_cards/card.dart';
 import 'package:ourhome/components/pinboard_cards/post.dart';
-
+import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:pocketbase/pocketbase.dart';
 
 import '../components/expense/create.dart';
 import '../helpers/post_types.dart';
-import '../routes/route_utils.dart';
-import '../routes/router.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String shareId;
+  const HomeScreen({super.key, required this.shareId});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -90,13 +88,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         onPressed: () async {
                           // TODO: run action for specific postType
                           var user = AuthState.of(context).user;
-                          var shareId = "q3wx3fdcvo8zw1q"; // TODO: get share id
                           await Api.of(context)
                               .pb
                               .collection('posts')
                               .create(body: {
                             'type': 'expense',
-                            'share': shareId,
+                            'share': widget.shareId,
                             'author': user?.id,
                             'data':
                                 '{"title": "Cleaning materials", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
@@ -201,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await AuthState.of(context).logout();
-              AppRouter.router.go(PAGES.login.screenPath);
+              AppRouter.router.go('/auth/login');
             },
           ),
         ],

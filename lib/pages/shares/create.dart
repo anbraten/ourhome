@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../routes/router.dart';
-import '../../routes/route_utils.dart';
 
 class CreateShareScreen extends StatelessWidget {
   const CreateShareScreen({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class CreateShareScreen extends StatelessWidget {
             // TODO: create share
 
             // TODO: redirect to share pinboard
-            AppRouter.router.go(PAGES.pinboard.screenPath);
+            AppRouter.router.go('/shares/q3wx3fdcvo8zw1q');
           },
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/routes/route_utils.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/components/expense/create.dart';
 import 'package:ourhome/states/auth.dart';
@@ -24,7 +23,7 @@ class AppBar extends StatelessWidget {
         icon: const Icon(Icons.logout),
         onPressed: () async {
           await AuthState.of(context).logout();
-          AppRouter.router.go(PAGES.login.screenPath);
+          AppRouter.router.go('/auth/login');
         },
       ),
     ],
