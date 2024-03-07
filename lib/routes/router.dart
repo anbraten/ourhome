@@ -16,11 +16,15 @@ class AppRouter {
     redirect: (BuildContext context, GoRouterState state) {
       bool isSignedIn = AuthState.of(context).isSignedIn;
 
-      if (!isSignedIn && state.fullPath != '/auth/login') {
+      if (state.fullPath == null) {
+        return null;
+      }
+
+      if (!isSignedIn && !state.fullPath!.startsWith('/auth')) {
         return '/auth/login';
       }
 
-      if (isSignedIn && state.fullPath == '/auth/login') {
+      if (isSignedIn && state.fullPath!.startsWith('/auth')) {
         return '/';
       }
 

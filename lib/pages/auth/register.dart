@@ -112,7 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const Text("Already have an account?"),
                   TextButton(
                     onPressed: () {
-                      AppRouter.router.go('/auth/login');
+                      AppRouter.router.replace('/auth/login');
                     },
                     child: const Text('Login'),
                   ),
