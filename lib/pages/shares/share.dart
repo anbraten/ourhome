@@ -198,13 +198,6 @@ class _ShareScreenState extends State<ShareScreen>
             _showCreateDialog(context);
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.logout),
-          onPressed: () async {
-            await AuthState.of(context).logout();
-            AppRouter.router.go('/auth/login');
-          },
-        ),
       ],
       bodyBuilder: (share) => Padding(
         padding: const EdgeInsets.all(1),
