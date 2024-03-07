@@ -11,9 +11,9 @@ Manage your WG with this app.
 
 ## TODO
 
-- [ ] login
+- [x] login
 - [x] check login status and redirect accordingly
-- [ ] register new user
+- [x] register new user
 - [ ] don't block for initial api load?
 - [ ] create home
 - [ ] invite user to home

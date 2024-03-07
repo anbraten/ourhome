@@ -42,13 +42,14 @@ class AuthState {
     return true;
   }
 
-  Future<bool> register(String email, name, password) async {
+  Future<void> register(String email, name, password) async {
     await _api.pb.collection('users').create(body: {
-      name: name,
-      email: email,
-      password: password,
+      'name': name,
+      'email': email,
+      'password': password,
+      'passwordConfirm': password,
     });
 
-    return login(email, password);
+    await _api.pb.collection('users').requestVerification(email);
   }
 }
