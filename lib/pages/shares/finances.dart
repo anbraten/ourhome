@@ -106,21 +106,27 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
                           .getOne(member);
                     }(),
                     builder: (_, data) {
-                      if (data.data == null) {
-                        return const Center(child: CircularProgressIndicator());
+                      final member = data.data;
+                      Widget avatar = const Icon(Icons.person, size: 50);
+
+                      if (member != null &&
+                          member.getStringValue("avatar") == "") {
+                        final avatarUrl =
+                            "${Api.url}/api/files/${member.collectionId}/${member.id}/${member.getStringValue("avatar")}";
+                        avatar = Image.network(avatarUrl,
+                            width: 50, height: 50, fit: BoxFit.cover);
                       }
 
-                      final member = data.data!;
-                      final avatarUrl = member.getStringValue("avatar") != ""
-                          ? "https://ourhome.ju60.de/api/files/${member.collectionId}/${member.id}/${member.getStringValue("avatar")}"
-                          : "";
+                      if (member == null) {
+                        avatar =
+                            const Center(child: CircularProgressIndicator());
+                      }
 
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Image.network(avatarUrl,
-                              width: 50, height: 50, fit: BoxFit.cover),
-                          Text(member.getStringValue("name"),
+                          avatar,
+                          Text(member?.getStringValue("name") ?? "",
                               style: const TextStyle(fontSize: 20)),
                           Text("${toPay.toString()}€",
                               style: const TextStyle(fontSize: 20)),

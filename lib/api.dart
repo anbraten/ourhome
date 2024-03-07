@@ -7,6 +7,8 @@ class Api {
   final PocketBase _api;
   PocketBase get pb => _api;
 
+  static const String url = 'https://ourhome.ju60.de';
+
   Api({required PocketBase api}) : _api = api;
 
   static Future<Api> load() async {
@@ -17,7 +19,7 @@ class Api {
       initial: prefs.getString('pb_auth'),
     );
 
-    var api = PocketBase('https://ourhome.ju60.de', authStore: store);
+    var api = PocketBase(url, authStore: store);
     return Api(api: api);
   }
 
