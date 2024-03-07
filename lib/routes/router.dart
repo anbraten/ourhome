@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/auth/login.dart';
+import 'package:ourhome/pages/shares/finances.dart';
 import 'package:ourhome/pages/shares/index.dart';
+import 'package:ourhome/pages/shares/settings/index.dart';
 import 'package:ourhome/pages/shares/share.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,10 +64,21 @@ class AppRouter {
             builder: (context, state) => const NotFoundScreen(),
           ),
           GoRoute(
-            path: ':shareId',
-            builder: (context, state) =>
-                ShareScreen(shareId: state.pathParameters['shareId']!),
-          ),
+              path: ':shareId',
+              builder: (context, state) =>
+                  ShareScreen(shareId: state.pathParameters['shareId']!),
+              routes: [
+                GoRoute(
+                  path: 'finances',
+                  builder: (context, state) => ShareFinancesScreen(
+                      shareId: state.pathParameters['shareId']!),
+                ),
+                GoRoute(
+                  path: 'settings',
+                  builder: (context, state) => ShareSettingsScreen(
+                      shareId: state.pathParameters['shareId']!),
+                ),
+              ]),
         ],
       ),
     ],

@@ -4,13 +4,16 @@ class Post {
   String id;
   String author;
   String type;
+  String share;
   Map<String, dynamic> data;
 
-  Post(
-      {required this.id,
-      required this.type,
-      required this.author,
-      required this.data});
+  Post({
+    required this.id,
+    required this.type,
+    required this.author,
+    required this.data,
+    required this.share,
+  });
 
   factory Post.fromRecordModel(RecordModel model) {
     return Post(
@@ -18,6 +21,7 @@ class Post {
       type: model.getStringValue("type"),
       author: model.getStringValue("author"),
       data: model.getDataValue("data"),
+      share: model.getStringValue("share"),
     );
   }
 }

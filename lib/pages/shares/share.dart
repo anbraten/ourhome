@@ -1,17 +1,12 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-
+import 'package:ourhome/components/layout/share_scaffold.dart';
 import 'package:ourhome/components/pinboard_cards/card.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/auth.dart';
-import 'package:ourhome/types/share.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:ourhome/components/expense/create.dart';
-import 'package:ourhome/helpers/post_types.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ShareScreen extends StatefulWidget {
   final String shareId;
@@ -59,96 +54,96 @@ class _ShareScreenState extends State<ShareScreen>
   OverlayEntry? overlayEntry;
   GlobalKey globalKey = GlobalKey();
 
-  _showOverLay() async {
-    RenderBox? renderBox =
-        globalKey.currentContext!.findRenderObject() as RenderBox?;
-    Offset offset = renderBox!.localToGlobal(Offset.zero);
+  // _showOverLay() async {
+  //   RenderBox? renderBox =
+  //       globalKey.currentContext!.findRenderObject() as RenderBox?;
+  //   Offset offset = renderBox!.localToGlobal(Offset.zero);
 
-    OverlayState? overlayState = Overlay.of(context);
+  //   OverlayState? overlayState = Overlay.of(context);
 
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+  //   double screenWidth = MediaQuery.of(context).size.width;
+  //   double screenHeight = MediaQuery.of(context).size.height;
 
-    overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        bottom: screenHeight - offset.dy - renderBox.size.height,
-        height: screenHeight * 0.3,
-        left: 0,
-        width: screenWidth,
-        child: ScaleTransition(
-          scale: animation!,
-          child: Material(
-            type: MaterialType.transparency,
-            child: Card(
-              shadowColor: Colors.transparent,
-              color: Colors.grey,
-              child: GridView.count(
-                crossAxisCount: 3,
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                children: List.from(postTypes)
-                    .map(
-                      (e) => TextButton(
-                        onPressed: () async {
-                          // TODO: run action for specific postType
-                          var user = AuthState.of(context).user;
-                          await Api.of(context)
-                              .pb
-                              .collection('posts')
-                              .create(body: {
-                            'type': 'expense',
-                            'share': widget.shareId,
-                            'author': user?.id,
-                            'data':
-                                '{"title": "Cleaning materials", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
-                          });
+  //   overlayEntry = OverlayEntry(
+  //     builder: (context) => Positioned(
+  //       bottom: screenHeight - offset.dy - renderBox.size.height,
+  //       height: screenHeight * 0.3,
+  //       left: 0,
+  //       width: screenWidth,
+  //       child: ScaleTransition(
+  //         scale: animation!,
+  //         child: Material(
+  //           type: MaterialType.transparency,
+  //           child: Card(
+  //             shadowColor: Colors.transparent,
+  //             color: Colors.grey,
+  //             child: GridView.count(
+  //               crossAxisCount: 3,
+  //               padding: EdgeInsets.zero,
+  //               shrinkWrap: true,
+  //               children: List.from(postTypes)
+  //                   .map(
+  //                     (e) => TextButton(
+  //                       onPressed: () async {
+  //                         // TODO: run action for specific postType
+  //                         var user = AuthState.of(context).user;
+  //                         await Api.of(context)
+  //                             .pb
+  //                             .collection('posts')
+  //                             .create(body: {
+  //                           'type': 'expense',
+  //                           'share': widget.shareId,
+  //                           'author': user?.id,
+  //                           'data':
+  //                               '{"title": "Cleaning materials", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
+  //                         });
 
-                          await animationController!.reverse();
-                          overlayEntry!.remove();
-                        },
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: e["color"] as Color?,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Icon(
-                                e["icon"] as IconData?,
-                                color: Colors.white,
-                                size: 32,
-                              ),
-                            ),
-                            Text(
-                              e["text"],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.red,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-    animationController!.addListener(() {
-      overlayState.setState(() {});
-    });
-    animationController!.forward();
-    overlayState.insert(overlayEntry!);
+  //                         await animationController!.reverse();
+  //                         overlayEntry!.remove();
+  //                       },
+  //                       child: Column(
+  //                         children: [
+  //                           Container(
+  //                             padding: const EdgeInsets.all(15),
+  //                             decoration: BoxDecoration(
+  //                               color: e["color"] as Color?,
+  //                               borderRadius: BorderRadius.circular(100),
+  //                             ),
+  //                             child: Icon(
+  //                               e["icon"] as IconData?,
+  //                               color: Colors.white,
+  //                               size: 32,
+  //                             ),
+  //                           ),
+  //                           Text(
+  //                             e["text"],
+  //                             textAlign: TextAlign.center,
+  //                             style: const TextStyle(
+  //                               color: Colors.red,
+  //                               fontSize: 14,
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   )
+  //                   .toList(),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  //   animationController!.addListener(() {
+  //     overlayState.setState(() {});
+  //   });
+  //   animationController!.forward();
+  //   overlayState.insert(overlayEntry!);
 
-    // await Future.delayed(const Duration(seconds: 5))
-    //     .whenComplete(() => animationController!.reverse())
-    //     .whenComplete(() => overlayEntry!.remove());
-  }
+  //   // await Future.delayed(const Duration(seconds: 5))
+  //   //     .whenComplete(() => animationController!.reverse())
+  //   //     .whenComplete(() => overlayEntry!.remove());
+  // }
 
   @override
   initState() {
@@ -160,11 +155,16 @@ class _ShareScreenState extends State<ShareScreen>
       if (event.record == null) {
         throw Exception('Record is null');
       }
+      final post = Post.fromRecordModel(event.record!);
+      if (post.share != widget.shareId) {
+        return;
+      }
+
       if (event.action == 'create' || event.action == 'update') {
-        _setPost(Post.fromRecordModel(event.record!));
+        _setPost(post);
       }
       if (event.action == 'delete') {
-        _deletePost(Post.fromRecordModel(event.record!));
+        _deletePost(post);
       }
     });
 
@@ -188,117 +188,70 @@ class _ShareScreenState extends State<ShareScreen>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return FutureBuilder<Share>(
-      future: () async {
-        var response = await Api.of(context)
-            .pb
-            .collection('shares')
-            .getOne(widget.shareId);
+    return ShareScaffold(
+      shareId: widget.shareId,
+      actions: [
+        IconButton(
+          key: globalKey,
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            _showCreateDialog(context);
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.logout),
+          onPressed: () async {
+            await AuthState.of(context).logout();
+            AppRouter.router.go('/auth/login');
+          },
+        ),
+      ],
+      bodyBuilder: (share) => Padding(
+        padding: const EdgeInsets.all(1),
+        child: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          color: Colors.white,
+          backgroundColor: Colors.greenAccent,
+          strokeWidth: 2.0,
+          onRefresh: () => _loadPosts(),
+          child: ListView.builder(
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              var post = posts.values.elementAt(index);
 
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('lastOpenedShare', response.id);
-
-        return Share.fromRecordModel(response);
-      }(),
-      builder: (_, data) {
-        final share = data.data;
-        if (share == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(share.name),
-            backgroundColor: Colors.greenAccent,
-            actions: [
-              IconButton(
-                key: globalKey,
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  _showCreateDialog(context);
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () async {
-                  await AuthState.of(context).logout();
-                  AppRouter.router.go('/auth/login');
-                },
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(1),
-            child: RefreshIndicator(
-              key: _refreshIndicatorKey,
-              color: Colors.white,
-              backgroundColor: Colors.greenAccent,
-              strokeWidth: 2.0,
-              onRefresh: () => _loadPosts(),
-              child: ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  var post = posts.values.elementAt(index);
-
-                  return GestureDetector(
-                    onLongPressStart: (LongPressStartDetails details) {
-                      showMenu(
-                        context: context,
-                        position: RelativeRect.fromLTRB(
-                          details.globalPosition.dx,
-                          details.globalPosition.dy,
-                          size.width - details.globalPosition.dx,
-                          size.height - details.globalPosition.dy,
+              return GestureDetector(
+                onLongPressStart: (LongPressStartDetails details) {
+                  showMenu(
+                    context: context,
+                    position: RelativeRect.fromLTRB(
+                      details.globalPosition.dx,
+                      details.globalPosition.dy,
+                      size.width - details.globalPosition.dx,
+                      size.height - details.globalPosition.dy,
+                    ),
+                    items: <PopupMenuEntry>[
+                      PopupMenuItem(
+                        value: index,
+                        onTap: () async {
+                          await Api.of(context)
+                              .pb
+                              .collection('posts')
+                              .delete(post.id);
+                        },
+                        child: const ListTile(
+                          leading: Icon(Icons.delete),
+                          title: Text('Delete'),
                         ),
-                        items: <PopupMenuEntry>[
-                          PopupMenuItem(
-                            value: index,
-                            onTap: () async {
-                              await Api.of(context)
-                                  .pb
-                                  .collection('posts')
-                                  .delete(post.id);
-                            },
-                            child: const ListTile(
-                              leading: Icon(Icons.delete),
-                              title: Text('Delete'),
-                            ),
-                          )
-                        ],
-                      );
-                    },
-                    child: PinboardCard(post: post),
+                      )
+                    ],
                   );
                 },
-              ),
-            ),
-          ),
-          bottomNavigationBar: NavigationBar(
-            onDestinationSelected: (int index) {
-              // setState(() {
-              //   currentPageIndex = index;
-              // });
+                child: PinboardCard(post: post),
+              );
             },
-            // selectedIndex: currentPageIndex,
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.push_pin),
-                label: 'Pinboard',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.money),
-                label: 'Finances',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.settings),
-                label: 'Settings',
-              ),
-            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
