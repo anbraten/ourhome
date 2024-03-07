@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/components/pinboard_cards/expense.dart';
+import 'package:ourhome/components/expense/pinboard_card.dart';
 import 'package:ourhome/components/pinboard_cards/post.dart';
 
 class PinboardCard extends StatelessWidget {
