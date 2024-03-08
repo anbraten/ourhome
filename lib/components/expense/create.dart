@@ -108,20 +108,45 @@ class _CreateEntryState extends State<CreateEntry> {
                 if (_selectedPostType == null) ...[
                   const Text(
                     'Select post type',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  ...postTypes
-                      .map((e) => RadioListTile<String>(
-                            title: Text(e['text']),
-                            value: e['text'],
-                            groupValue: _selectedPostType,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedPostType = value;
-                              });
-                            },
-                          ))
-                      .toList(),
+                  GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Adjust the number of items per row
+                      childAspectRatio: 1.0, // Makes the items square
+                    ),
+                    itemCount: postTypes.length,
+                    itemBuilder: (context, index) {
+                      var e = postTypes[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: Colors.green[300],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(e['icon'], size: 50, color: Colors.black),
+                              const SizedBox(height: 10),
+                              Text(e['text'], textAlign: TextAlign.center, style: const TextStyle(color: Colors.black, fontSize: 16),),
+                            ],
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _selectedPostType = e['text'];
+                            });
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ],
                 if (_selectedPostType == "Expense")
                   _createExpenseForm(widget.shareId, _selectedPostType, () {
