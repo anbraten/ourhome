@@ -68,7 +68,7 @@ class ExpenseCard extends StatelessWidget {
 //           type: 'expense',
 //           card: ExpenseCard.fromPost,
 //           icon: Icons.attach_money,
-//           color: Colors.greenAccent,
+//           color: Colors.green[300],
 //           text: 'Expense',
 //         );
 // }

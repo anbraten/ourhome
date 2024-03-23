@@ -8,11 +8,13 @@ class ShareScaffold extends StatelessWidget {
   final String shareId;
   final Widget Function(Share) bodyBuilder;
   final List<Widget>? actions;
+  final Widget? floatingActionButton;
   const ShareScaffold({
     super.key,
     required this.shareId,
     required this.bodyBuilder,
     this.actions,
+    this.floatingActionButton,
   });
 
   @override
@@ -50,11 +52,14 @@ class ShareScaffold extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(share.name),
-            backgroundColor: Colors.greenAccent,
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.green[300],
             actions: actions,
           ),
           body: bodyBuilder(share),
+          floatingActionButton: floatingActionButton,
           bottomNavigationBar: NavigationBar(
+            // shape: const CircularNotchedRectangle(),
             onDestinationSelected: (int index) {
               AppRouter.router.replace(routes[index]);
             },

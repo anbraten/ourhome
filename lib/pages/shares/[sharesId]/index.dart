@@ -192,20 +192,37 @@ class _ShareScreenState extends State<ShareScreen>
     return ShareScaffold(
       shareId: widget.shareId,
       actions: [
-        IconButton(
-          key: globalKey,
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            _showCreateDialog(context);
+        PopupMenuButton<String>(
+          onSelected: (String choice) {},
+          itemBuilder: (BuildContext context) {
+            return {'Logout', 'Settings'}.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
           },
         ),
       ],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green[300],
+        tooltip: 'Increment',
+        shape: const CircleBorder(),
+        onPressed: () {
+          _showCreateDialog(context);
+        },
+        child: const Icon(
+          Icons.add,
+          size: 28,
+          color: Colors.white,
+        ),
+      ),
       bodyBuilder: (share) => Padding(
         padding: const EdgeInsets.all(1),
         child: RefreshIndicator(
           key: _refreshIndicatorKey,
           color: Colors.white,
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.green[300],
           strokeWidth: 2.0,
           onRefresh: () => _loadPosts(),
           child: ListView.builder(

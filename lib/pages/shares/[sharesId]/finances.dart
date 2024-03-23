@@ -81,7 +81,7 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
         child: RefreshIndicator(
           key: _refreshIndicatorKey,
           color: Colors.white,
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.green[300],
           strokeWidth: 2.0,
           onRefresh: () => _loadPosts(),
           child: ListView.builder(

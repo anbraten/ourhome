@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(10),
                         minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.teal,
+                        backgroundColor: Colors.green[300],
                       ),
                       child: const Text(
                         'Login',
@@ -107,8 +107,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             AppRouter.router.replace('/auth/register');
                           },
-                          child: const Text('Register',
-                              style: TextStyle(color: Colors.greenAccent)),
+                          child: Text('Register',
+                              style: TextStyle(color: Colors.green[300])),
                         ),
                       ]),
                 ),

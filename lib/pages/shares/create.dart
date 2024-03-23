@@ -20,7 +20,8 @@ class _CreateShareState extends State<CreateShareScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Share'),
-        backgroundColor: Colors.greenAccent,
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.green[300],
       ),
       body: Form(
         key: _formKey,
@@ -51,7 +52,7 @@ class _CreateShareState extends State<CreateShareScreen> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.all(10),
                       minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.greenAccent,
+                      backgroundColor: Colors.green[300],
                     ),
                     child: const Text(
                       'Create',

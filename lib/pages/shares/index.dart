@@ -69,29 +69,44 @@ class _SharesListState extends State<SharesListScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shares'),
-        backgroundColor: Colors.greenAccent,
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.green[300],
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              AppRouter.router.go('/shares/create');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
+          PopupMenuButton<String>(onSelected: (String choice) async {
+            if (choice == 'Logout') {
               await AuthState.of(context).logout();
               AppRouter.router.go('/auth/login');
-            },
-          ),
+            }
+          }, itemBuilder: (BuildContext context) {
+            return [
+              const PopupMenuItem<String>(
+                  value: 'Logout',
+                  child: Row(
+                    children: [
+                      Icon(Icons.logout),
+                      SizedBox(width: 10),
+                      Text('Logout'),
+                    ],
+                  )),
+            ];
+          }),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green[300],
+        tooltip: 'Increment',
+        shape: const CircleBorder(),
+        onPressed: () {
+          AppRouter.router.go('/shares/create');
+        },
+        child: const Icon(Icons.add, size: 28, color: Colors.white),
       ),
       body: Padding(
         padding: const EdgeInsets.all(1),
         child: RefreshIndicator(
           key: _refreshIndicatorKey,
           color: Colors.white,
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.green[300],
           strokeWidth: 2.0,
           onRefresh: () => _loadShares(),
           child: ListView.builder(

@@ -121,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.all(10),
                         minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.teal,
+                        backgroundColor: Colors.green[300],
                       ),
                       child: const Text(
                         'Register',
@@ -168,9 +168,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onPressed: () {
                             AppRouter.router.replace('/auth/login');
                           },
-                          child: const Text(
+                          child: Text(
                             'Login',
-                            style: TextStyle(color: Colors.greenAccent),
+                            style: TextStyle(color: Colors.green[300]),
                           ),
                         ),
                       ]),

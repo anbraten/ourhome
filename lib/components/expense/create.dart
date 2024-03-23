@@ -12,7 +12,7 @@ class CreateEntry extends StatefulWidget {
 }
 
 Column _createExpenseForm(
-    String shareId, _selectedPostType, Function resetPostType, context) {
+    String shareId, selectedPostType, Function resetPostType, context) {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
   final currencyController = TextEditingController();
@@ -72,7 +72,7 @@ Column _createExpenseForm(
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(10),
-                backgroundColor: Colors.teal,
+                backgroundColor: Colors.green[300],
               ),
               child: const Text('Submit',
                   style: TextStyle(fontSize: 16, color: Colors.white)),
@@ -85,7 +85,7 @@ Column _createExpenseForm(
 }
 
 class _CreateEntryState extends State<CreateEntry> {
-  String? _selectedPostType;
+  String? selectedPostType;
   String? selectedCurrency;
 
   @override
@@ -105,7 +105,7 @@ class _CreateEntryState extends State<CreateEntry> {
                     },
                   ),
                 ]),
-                if (_selectedPostType == null) ...[
+                if (selectedPostType == null) ...[
                   const Text(
                     'Select post type',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -113,7 +113,8 @@ class _CreateEntryState extends State<CreateEntry> {
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2, // Adjust the number of items per row
                       childAspectRatio: 1.0, // Makes the items square
                     ),
@@ -133,14 +134,19 @@ class _CreateEntryState extends State<CreateEntry> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(e['icon'], size: 50, color: Colors.black),
+                              Icon(e['icon'], size: 50, color: Colors.white),
                               const SizedBox(height: 10),
-                              Text(e['text'], textAlign: TextAlign.center, style: const TextStyle(color: Colors.black, fontSize: 16),),
+                              Text(
+                                e['text'],
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
                             ],
                           ),
                           onPressed: () {
                             setState(() {
-                              _selectedPostType = e['text'];
+                              selectedPostType = e['text'];
                             });
                           },
                         ),
@@ -148,10 +154,10 @@ class _CreateEntryState extends State<CreateEntry> {
                     },
                   ),
                 ],
-                if (_selectedPostType == "Expense")
-                  _createExpenseForm(widget.shareId, _selectedPostType, () {
+                if (selectedPostType == "Expense")
+                  _createExpenseForm(widget.shareId, selectedPostType, () {
                     setState(() {
-                      _selectedPostType = null;
+                      selectedPostType = null;
                     });
                   }, context),
               ],
