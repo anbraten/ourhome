@@ -5,10 +5,10 @@ import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/auth/login.dart';
 import 'package:ourhome/pages/shares/create.dart';
-import 'package:ourhome/pages/shares/%5BsharesId%5D/finances.dart';
+import 'package:ourhome/pages/shares/_shareId/finances.dart';
 import 'package:ourhome/pages/shares/index.dart';
-import 'package:ourhome/pages/shares/%5BsharesId%5D/settings/index.dart';
-import 'package:ourhome/pages/shares/%5BsharesId%5D/index.dart';
+import 'package:ourhome/pages/shares/_shareId/settings/index.dart';
+import 'package:ourhome/pages/shares/_shareId/index.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -50,20 +50,19 @@ class AppRouter {
             return '/shares';
           }),
       GoRoute(
-        path: '/auth/register',
-        builder: (context, state) => const RegisterScreen(),
-      ),
+          path: '/auth/register',
+          builder: (context, state) => RegisterScreen(key: state.pageKey)),
       GoRoute(
         path: '/auth/login',
-        builder: (context, state) => const LoginScreen(),
+        builder: (context, state) => LoginScreen(key: state.pageKey),
       ),
       GoRoute(
         path: '/shares',
-        builder: (context, state) => const SharesListScreen(),
+        builder: (context, state) => SharesListScreen(key: state.pageKey),
         routes: [
           GoRoute(
             path: 'create',
-            builder: (context, state) => const CreateShareScreen(),
+            builder: (context, state) => CreateShareScreen(key: state.pageKey),
           ),
           GoRoute(
               path: ':shareId',
@@ -73,23 +72,26 @@ class AppRouter {
                 GoRoute(
                   path: 'create/:postType',
                   builder: (context, state) => CreatePostScreen(
+                      key: state.pageKey,
                       shareId: state.pathParameters['shareId']!),
                 ),
                 GoRoute(
                   path: 'finances',
                   builder: (context, state) => ShareFinancesScreen(
+                      key: state.pageKey,
                       shareId: state.pathParameters['shareId']!),
                 ),
                 GoRoute(
                   path: 'settings',
                   builder: (context, state) => ShareSettingsScreen(
+                      key: state.pageKey,
                       shareId: state.pathParameters['shareId']!),
                 ),
               ]),
         ],
       ),
     ],
-    errorBuilder: (context, state) => const NotFoundScreen(),
+    errorBuilder: (context, state) => NotFoundScreen(key: state.pageKey),
   );
 
   static GoRouter get router => _router;

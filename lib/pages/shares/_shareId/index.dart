@@ -176,16 +176,10 @@ class _ShareScreenState extends State<ShareScreen>
   }
 }
 
-class CreatePost extends StatefulWidget {
+class CreatePost extends StatelessWidget {
   final String shareId;
+
   const CreatePost({super.key, required this.shareId});
-
-  @override
-  State<CreatePost> createState() => _CreatePostState();
-}
-
-class _CreatePostState extends State<CreatePost> {
-  String? selectedCurrency;
 
   @override
   Widget build(BuildContext context) => Dialog(
@@ -242,8 +236,8 @@ class _CreatePostState extends State<CreatePost> {
                           ],
                         ),
                         onPressed: () {
-                          AppRouter.router.go(
-                              '/shares/${widget.shareId}/create/${e['type']}');
+                          var url = '/shares/$shareId/create/${e['type']}';
+                          AppRouter.router.go(url);
                         },
                       ),
                     );
