@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/api.dart';
 import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/types/share.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ShareScaffold extends StatelessWidget {
   final String shareId;
@@ -20,15 +19,7 @@ class ShareScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Share>(
-      future: () async {
-        var response =
-            await Api.of(context).pb.collection('shares').getOne(shareId);
-
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('lastOpenedShare', response.id);
-
-        return Share.fromRecordModel(response);
-      }(),
+      future: AppState.of(context).loadShare(shareId),
       builder: (_, data) {
         final share = data.data;
         if (share == null) {
@@ -52,16 +43,13 @@ class ShareScaffold extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             title: Text(share.name),
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.green[300],
             actions: actions,
           ),
           body: bodyBuilder(share),
           floatingActionButton: floatingActionButton,
           bottomNavigationBar: NavigationBar(
-            // shape: const CircularNotchedRectangle(),
             onDestinationSelected: (int index) {
-              AppRouter.router.replace(routes[index]);
+              AppRouter.router.go(routes[index]);
             },
             selectedIndex: selectedIndex,
             destinations: const [

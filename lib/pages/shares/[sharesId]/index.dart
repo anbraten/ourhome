@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
 import 'package:ourhome/components/pinboard_cards/card.dart';
+import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:ourhome/components/expense/create.dart';
+import 'package:ourhome/helpers/post_types.dart';
 
 class ShareScreen extends StatefulWidget {
   final String shareId;
@@ -55,97 +56,6 @@ class _ShareScreenState extends State<ShareScreen>
   OverlayEntry? overlayEntry;
   GlobalKey globalKey = GlobalKey();
 
-  // _showOverLay() async {
-  //   RenderBox? renderBox =
-  //       globalKey.currentContext!.findRenderObject() as RenderBox?;
-  //   Offset offset = renderBox!.localToGlobal(Offset.zero);
-
-  //   OverlayState? overlayState = Overlay.of(context);
-
-  //   double screenWidth = MediaQuery.of(context).size.width;
-  //   double screenHeight = MediaQuery.of(context).size.height;
-
-  //   overlayEntry = OverlayEntry(
-  //     builder: (context) => Positioned(
-  //       bottom: screenHeight - offset.dy - renderBox.size.height,
-  //       height: screenHeight * 0.3,
-  //       left: 0,
-  //       width: screenWidth,
-  //       child: ScaleTransition(
-  //         scale: animation!,
-  //         child: Material(
-  //           type: MaterialType.transparency,
-  //           child: Card(
-  //             shadowColor: Colors.transparent,
-  //             color: Colors.grey,
-  //             child: GridView.count(
-  //               crossAxisCount: 3,
-  //               padding: EdgeInsets.zero,
-  //               shrinkWrap: true,
-  //               children: List.from(postTypes)
-  //                   .map(
-  //                     (e) => TextButton(
-  //                       onPressed: () async {
-  //                         // TODO: run action for specific postType
-  //                         var user = AuthState.of(context).user;
-  //                         await Api.of(context)
-  //                             .pb
-  //                             .collection('posts')
-  //                             .create(body: {
-  //                           'type': 'expense',
-  //                           'share': widget.shareId,
-  //                           'author': user?.id,
-  //                           'data':
-  //                               '{"title": "Cleaning materials", "date": "2023-09-21T07:03:45.292Z", "amount": 10, "currency": "EUR", "paidBy": "Ich", "paidFor": ["Ich", "Du"]}',
-  //                         });
-
-  //                         await animationController!.reverse();
-  //                         overlayEntry!.remove();
-  //                       },
-  //                       child: Column(
-  //                         children: [
-  //                           Container(
-  //                             padding: const EdgeInsets.all(15),
-  //                             decoration: BoxDecoration(
-  //                               color: e["color"] as Color?,
-  //                               borderRadius: BorderRadius.circular(100),
-  //                             ),
-  //                             child: Icon(
-  //                               e["icon"] as IconData?,
-  //                               color: Colors.white,
-  //                               size: 32,
-  //                             ),
-  //                           ),
-  //                           Text(
-  //                             e["text"],
-  //                             textAlign: TextAlign.center,
-  //                             style: const TextStyle(
-  //                               color: Colors.red,
-  //                               fontSize: 14,
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                   )
-  //                   .toList(),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  //   animationController!.addListener(() {
-  //     overlayState.setState(() {});
-  //   });
-  //   animationController!.forward();
-  //   overlayState.insert(overlayEntry!);
-
-  //   // await Future.delayed(const Duration(seconds: 5))
-  //   //     .whenComplete(() => animationController!.reverse())
-  //   //     .whenComplete(() => overlayEntry!.remove());
-  // }
-
   @override
   initState() {
     super.initState();
@@ -180,7 +90,7 @@ class _ShareScreenState extends State<ShareScreen>
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CreateEntry(shareId: widget.shareId);
+        return CreatePost(shareId: widget.shareId);
       },
     );
   }
@@ -205,8 +115,7 @@ class _ShareScreenState extends State<ShareScreen>
         ),
       ],
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green[300],
-        tooltip: 'Increment',
+        tooltip: 'Add post',
         shape: const CircleBorder(),
         onPressed: () {
           _showCreateDialog(context);
@@ -265,4 +174,84 @@ class _ShareScreenState extends State<ShareScreen>
       ),
     );
   }
+}
+
+class CreatePost extends StatefulWidget {
+  final String shareId;
+  const CreatePost({super.key, required this.shareId});
+
+  @override
+  State<CreatePost> createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
+  String? selectedCurrency;
+
+  @override
+  Widget build(BuildContext context) => Dialog(
+        backgroundColor: Colors.white,
+        insetPadding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      AppRouter.router.pop();
+                    },
+                  ),
+                ]),
+                const Text(
+                  'Select post type',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Adjust the number of items per row
+                    childAspectRatio: 1.0, // Makes the items square
+                  ),
+                  itemCount: postTypes.length,
+                  itemBuilder: (context, index) {
+                    var e = postTypes[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: e['color'],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(e['icon'], size: 50, color: Colors.white),
+                            const SizedBox(height: 10),
+                            Text(
+                              e['text'],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        onPressed: () {
+                          AppRouter.router.go(
+                              '/shares/${widget.shareId}/create/${e['type']}');
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/auth.dart';
@@ -20,8 +19,6 @@ class _CreateShareState extends State<CreateShareScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Share'),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.green[300],
       ),
       body: Form(
         key: _formKey,
@@ -49,11 +46,6 @@ class _CreateShareState extends State<CreateShareScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                 child: Center(
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(10),
-                      minimumSize: const Size(double.infinity, 50),
-                      backgroundColor: Colors.green[300],
-                    ),
                     child: const Text(
                       'Create',
                       style: TextStyle(fontSize: 16, color: Colors.white),

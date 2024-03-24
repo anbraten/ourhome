@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:ourhome/components/expense/create.dart';
 import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/auth/login.dart';
@@ -69,6 +70,11 @@ class AppRouter {
               builder: (context, state) =>
                   ShareScreen(shareId: state.pathParameters['shareId']!),
               routes: [
+                GoRoute(
+                  path: 'create/:postType',
+                  builder: (context, state) => CreatePostScreen(
+                      shareId: state.pathParameters['shareId']!),
+                ),
                 GoRoute(
                   path: 'finances',
                   builder: (context, state) => ShareFinancesScreen(

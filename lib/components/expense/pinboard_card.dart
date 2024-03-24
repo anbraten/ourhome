@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ourhome/helpers/post_types.dart';
 import 'package:ourhome/types/post.dart';
 
 class ExpenseData {
@@ -54,6 +55,8 @@ class ExpenseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: postTypes
+          .firstWhere((element) => element['type'] == post.type)['color'],
       child: ListTile(
         title: Text('${expenseData.title} (${_getMoneyString()})'),
         subtitle: Text(expenseData.paidBy),
@@ -61,14 +64,3 @@ class ExpenseCard extends StatelessWidget {
     );
   }
 }
-
-// class Expense extends PostType {
-//   Expense()
-//       : super(
-//           type: 'expense',
-//           card: ExpenseCard.fromPost,
-//           icon: Icons.attach_money,
-//           color: Colors.green[300],
-//           text: 'Expense',
-//         );
-// }

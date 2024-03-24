@@ -118,11 +118,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                   child: Center(
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.all(10),
-                        minimumSize: const Size(double.infinity, 50),
-                        backgroundColor: Colors.green[300],
-                      ),
                       child: const Text(
                         'Register',
                         style: TextStyle(fontSize: 16, color: Colors.white),

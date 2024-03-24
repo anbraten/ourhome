@@ -69,8 +69,6 @@ class _SharesListState extends State<SharesListScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Shares'),
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.green[300],
         actions: [
           PopupMenuButton<String>(onSelected: (String choice) async {
             if (choice == 'Logout') {
@@ -93,8 +91,7 @@ class _SharesListState extends State<SharesListScreen>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green[300],
-        tooltip: 'Increment',
+        tooltip: 'Add share',
         shape: const CircleBorder(),
         onPressed: () {
           AppRouter.router.go('/shares/create');
