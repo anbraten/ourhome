@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/components/expense/types.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
+import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -74,6 +75,8 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = AppState.of(context);
+
     return ShareScaffold(
       shareId: widget.shareId,
       bodyBuilder: (share) => Padding(
@@ -85,9 +88,9 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
           strokeWidth: 2.0,
           onRefresh: () => _loadPosts(),
           child: ListView.builder(
-            itemCount: share.members.length,
+            itemCount: appState.shareMembers?.length,
             itemBuilder: (context, index) {
-              var member = share.members.elementAt(index);
+              var member = appState.shareMembers?.elementAt(index);
 
               var expenses = posts.values
                   .where((post) {
@@ -105,44 +108,21 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
                     (expense.paidBy.first.amount / expense.paidFor.length);
               });
 
+              Widget avatar = member?.avatarWidget ??
+                  const Center(child: CircularProgressIndicator());
+
               return Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FutureBuilder(
-                    future: () async {
-                      return Api.of(context)
-                          .pb
-                          .collection('users')
-                          .getOne(member);
-                    }(),
-                    builder: (_, data) {
-                      final member = data.data;
-                      Widget avatar = const Icon(Icons.person, size: 50);
-
-                      if (member != null &&
-                          member.getStringValue("avatar") != "") {
-                        final avatarUrl =
-                            "${Api.url}/api/files/${member.collectionId}/${member.id}/${member.getStringValue("avatar")}";
-                        avatar = Image.network(avatarUrl,
-                            width: 50, height: 50, fit: BoxFit.cover);
-                      }
-
-                      if (member == null) {
-                        avatar =
-                            const Center(child: CircularProgressIndicator());
-                      }
-
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          avatar,
-                          Text(member?.getStringValue("name") ?? "",
-                              style: const TextStyle(fontSize: 20)),
-                          Text("${toPay.toString()}€",
-                              style: const TextStyle(fontSize: 20)),
-                        ],
-                      );
-                    },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      avatar,
+                      Text(member?.name ?? "...",
+                          style: const TextStyle(fontSize: 20)),
+                      Text("${toPay.toString()}€",
+                          style: const TextStyle(fontSize: 20)),
+                    ],
                   ),
                 ),
               );

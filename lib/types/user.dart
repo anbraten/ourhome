@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:pocketbase/pocketbase.dart';
 
@@ -21,11 +22,19 @@ class User {
   });
 
   get avatarUrl {
-    if (avatar == null || collectionId == null) {
+    if (avatar == null || avatar == "" || collectionId == null) {
       return null;
     }
 
     return "${Api.url}/api/files/$collectionId/$id/$avatar";
+  }
+
+  get avatarWidget {
+    if (avatarUrl == null) {
+      return const Icon(Icons.person, size: 50);
+    }
+
+    return Image.network(avatarUrl, width: 50, height: 50, fit: BoxFit.cover);
   }
 
   factory User.fromRecordModel(RecordModel model) {

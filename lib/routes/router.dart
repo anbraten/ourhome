@@ -8,7 +8,7 @@ import 'package:ourhome/pages/auth/login.dart';
 import 'package:ourhome/pages/shares/create.dart';
 import 'package:ourhome/pages/shares/_shareId/finances.dart';
 import 'package:ourhome/pages/shares/index.dart';
-import 'package:ourhome/pages/shares/_shareId/settings/index.dart';
+import 'package:ourhome/pages/shares/_shareId/settings.dart';
 import 'package:ourhome/pages/shares/_shareId/index.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
