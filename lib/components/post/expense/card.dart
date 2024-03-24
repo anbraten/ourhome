@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/components/expense/types.dart';
-import 'package:ourhome/types/post_type.dart';
+import 'package:ourhome/components/post/expense/types.dart';
+import 'package:ourhome/components/post/types.dart';
 import 'package:ourhome/types/post.dart';
 
 class ExpenseCard extends StatelessWidget {

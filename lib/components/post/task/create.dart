@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-import 'package:ourhome/components/note/types.dart';
-import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/components/post/task/types.dart';
+import 'package:ourhome/router.dart';
 import 'package:ourhome/states/auth.dart';
 
-class CreatePostNoteScreen extends StatefulWidget {
+class CreatePostTask extends StatefulWidget {
   final String shareId;
-  const CreatePostNoteScreen({super.key, required this.shareId});
+  const CreatePostTask({super.key, required this.shareId});
 
   @override
-  State<CreatePostNoteScreen> createState() => _CreatePostNoteState();
+  State<CreatePostTask> createState() => _CreatePostTaskState();
 }
 
-class _CreatePostNoteState extends State<CreatePostNoteScreen> {
+class _CreatePostTaskState extends State<CreatePostTask> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final amountController = TextEditingController();
@@ -26,7 +26,7 @@ class _CreatePostNoteState extends State<CreatePostNoteScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Note'),
+        title: const Text('Create Task'),
       ),
       body: Form(
         key: _formKey,
@@ -51,15 +51,29 @@ class _CreatePostNoteState extends State<CreatePostNoteScreen> {
                     return;
                   }
 
-                  NoteData noteData = NoteData(
-                    message: titleController.text,
+                  TaskData taskData = TaskData(
+                    assignedTo: authState.user!.id,
+                    tasks: [
+                      Task(
+                        title: 'Task 1',
+                        completed: false,
+                      ),
+                      Task(
+                        title: 'Task 2',
+                        completed: false,
+                      ),
+                      Task(
+                        title: 'Task 3',
+                        completed: false,
+                      ),
+                    ],
                   );
 
                   await Api.of(context).pb.collection('posts').create(body: {
                     'share': widget.shareId,
                     'author': authState.user?.id,
-                    'type': 'note',
-                    'data': noteData.toJson(),
+                    'type': 'task',
+                    'data': taskData.toJson(),
                   });
                   AppRouter.router.pop();
                 },

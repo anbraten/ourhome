@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
-import 'package:ourhome/components/pinboard_cards/card.dart';
-import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/components/post/card.dart';
+import 'package:ourhome/components/post/types.dart';
+import 'package:ourhome/router.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:ourhome/types/post_type.dart';
 
 class ShareScreen extends StatefulWidget {
   final String shareId;
@@ -90,7 +90,7 @@ class _ShareScreenState extends State<ShareScreen>
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return CreatePost(shareId: widget.shareId);
+        return _CreatePost(shareId: widget.shareId);
       },
     );
   }
@@ -176,10 +176,10 @@ class _ShareScreenState extends State<ShareScreen>
   }
 }
 
-class CreatePost extends StatelessWidget {
+class _CreatePost extends StatelessWidget {
   final String shareId;
 
-  const CreatePost({super.key, required this.shareId});
+  const _CreatePost({super.key, required this.shareId});
 
   @override
   Widget build(BuildContext context) => Dialog(

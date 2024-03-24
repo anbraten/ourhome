@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-import 'package:ourhome/components/expense/types.dart';
-import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/components/post/expense/types.dart';
+import 'package:ourhome/router.dart';
 import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/states/auth.dart';
 import 'package:ourhome/types/user.dart';
 
-class CreatePostExpenseScreen extends StatefulWidget {
+class CreatePostExpense extends StatefulWidget {
   final String shareId;
-  const CreatePostExpenseScreen({super.key, required this.shareId});
+  const CreatePostExpense({super.key, required this.shareId});
 
   @override
-  State<CreatePostExpenseScreen> createState() => _CreatePostExpenseState();
+  State<CreatePostExpense> createState() => _CreatePostExpenseState();
 }
 
-class _CreatePostExpenseState extends State<CreatePostExpenseScreen> {
+class _CreatePostExpenseState extends State<CreatePostExpense> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final amountController = TextEditingController();

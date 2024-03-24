@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/router.dart';
 import 'package:ourhome/states/auth.dart';
 
 class CreateShareScreen extends StatefulWidget {

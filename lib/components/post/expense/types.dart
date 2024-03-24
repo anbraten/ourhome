@@ -60,8 +60,10 @@ class ExpenseData {
       title: json['title'],
       date: DateTime.parse(json['date']),
       currency: json['currency'],
-      paidBy: json['paidBy'].map((e) => AmountPerson.fromJson(e)).toList(),
-      paidFor: json['paidFor'].map((e) => AmountPerson.fromJson(e)).toList(),
+      paidBy: [],
+      paidFor: [],
+      // paidBy: json['paidBy'].map((e) => AmountPerson.fromJson(e)).toList(),
+      // paidFor: json['paidFor'].map((e) => AmountPerson.fromJson(e)).toList(),
     );
   }
 

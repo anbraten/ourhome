@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/router.dart';
 import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/types/share.dart';
 

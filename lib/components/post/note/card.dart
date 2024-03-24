@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/components/note/types.dart';
+import 'package:ourhome/components/post/note/types.dart';
+import 'package:ourhome/components/post/types.dart';
 import 'package:ourhome/states/app_state.dart';
-import 'package:ourhome/types/post_type.dart';
 import 'package:ourhome/types/post.dart';
 
 class NoteCard extends StatelessWidget {

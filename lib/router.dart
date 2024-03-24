@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ourhome/components/expense/create.dart';
-import 'package:ourhome/components/note/create.dart';
+import 'package:ourhome/components/post/create.dart';
 import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/auth/login.dart';
@@ -71,28 +70,26 @@ class AppRouter {
                   ShareScreen(shareId: state.pathParameters['shareId']!),
               routes: [
                 GoRoute(
-                  path: 'create/expense',
-                  builder: (context, state) => CreatePostExpenseScreen(
-                      key: state.pageKey,
-                      shareId: state.pathParameters['shareId']!),
-                ),
-                GoRoute(
-                  path: 'create/note',
-                  builder: (context, state) => CreatePostNoteScreen(
-                      key: state.pageKey,
-                      shareId: state.pathParameters['shareId']!),
+                  path: 'create/:postType',
+                  builder: (context, state) => PostCreate(
+                    key: state.pageKey,
+                    postType: state.pathParameters['postType']!,
+                    shareId: state.pathParameters['shareId']!,
+                  ),
                 ),
                 GoRoute(
                   path: 'finances',
                   builder: (context, state) => ShareFinancesScreen(
-                      key: state.pageKey,
-                      shareId: state.pathParameters['shareId']!),
+                    key: state.pageKey,
+                    shareId: state.pathParameters['shareId']!,
+                  ),
                 ),
                 GoRoute(
                   path: 'settings',
                   builder: (context, state) => ShareSettingsScreen(
-                      key: state.pageKey,
-                      shareId: state.pathParameters['shareId']!),
+                    key: state.pageKey,
+                    shareId: state.pathParameters['shareId']!,
+                  ),
                 ),
               ]),
         ],

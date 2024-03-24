@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/components/expense/card.dart';
-import 'package:ourhome/components/note/card.dart';
+import 'package:ourhome/components/post/types.dart';
 import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/types/post.dart';
 
@@ -11,12 +10,10 @@ class PinboardCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (post.type == 'expense') {
-      return ExpenseCard.fromPost(post);
-    }
+    var postType = postTypes.firstWhere((element) => element.type == post.type);
 
-    if (post.type == 'note') {
-      return NoteCard.fromPost(post);
+    if (postType.createCard != null) {
+      return postType.createCard!(post);
     }
 
     var appState = AppState.of(context);

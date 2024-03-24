@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-import 'package:ourhome/components/expense/types.dart';
+import 'package:ourhome/components/post/expense/types.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
 import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/types/post.dart';
