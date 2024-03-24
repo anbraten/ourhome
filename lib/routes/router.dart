@@ -70,8 +70,8 @@ class AppRouter {
                   ShareScreen(shareId: state.pathParameters['shareId']!),
               routes: [
                 GoRoute(
-                  path: 'create/:postType',
-                  builder: (context, state) => CreatePostScreen(
+                  path: 'create/expense',
+                  builder: (context, state) => CreatePostExpenseScreen(
                       key: state.pageKey,
                       shareId: state.pathParameters['shareId']!),
                 ),

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/routes/router.dart';
+import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/states/auth.dart';
-import 'package:ourhome/components/layout/share_scaffold.dart';
 
-class CreatePostScreen extends StatefulWidget {
+class CreatePostExpenseScreen extends StatefulWidget {
   final String shareId;
-  const CreatePostScreen({super.key, required this.shareId});
+  const CreatePostExpenseScreen({super.key, required this.shareId});
 
   @override
-  State<CreatePostScreen> createState() => _CreatePostState();
+  State<CreatePostExpenseScreen> createState() => _CreatePostExpenseState();
 }
 
-class _CreatePostState extends State<CreatePostScreen> {
+class _CreatePostExpenseState extends State<CreatePostExpenseScreen> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final amountController = TextEditingController();
@@ -22,18 +22,18 @@ class _CreatePostState extends State<CreatePostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ShareScaffold(
-      shareId: widget.shareId,
-      bodyBuilder: (share) => Form(
+    var appState = AppState.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Create Expense'),
+      ),
+      body: Form(
         key: _formKey,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             children: [
-              const Text(
-                'Add a new Expense',
-                style: TextStyle(fontSize: 24),
-              ),
               Column(children: [
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Title'),

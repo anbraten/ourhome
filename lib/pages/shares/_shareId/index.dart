@@ -183,37 +183,48 @@ class CreatePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Dialog(
+        alignment: Alignment.bottomCenter,
+        insetPadding: const EdgeInsets.all(0),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
         backgroundColor: Colors.white,
-        insetPadding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(8),
             child: Column(
               children: [
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      AppRouter.router.pop();
-                    },
-                  ),
-                ]),
-                const Text(
-                  'Select post type',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Create new post',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close),
+                          onPressed: () {
+                            AppRouter.router.pop();
+                          },
+                        ),
+                      ]),
                 ),
                 GridView.builder(
                   shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Adjust the number of items per row
-                    childAspectRatio: 1.0, // Makes the items square
+                    crossAxisCount: 3, // Adjust the number of items per row
                   ),
                   itemCount: postTypes.length,
                   itemBuilder: (context, index) {
                     var e = postTypes[index];
                     return Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -225,18 +236,19 @@ class CreatePost extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(e['icon'], size: 50, color: Colors.white),
-                            const SizedBox(height: 10),
+                            Icon(e['icon'], size: 48, color: Colors.white),
+                            const SizedBox(height: 8),
                             Text(
                               e['text'],
                               textAlign: TextAlign.center,
                               style: const TextStyle(
-                                  color: Colors.white, fontSize: 16),
+                                  color: Colors.white, fontSize: 12),
                             ),
                           ],
                         ),
                         onPressed: () {
                           var url = '/shares/$shareId/create/${e['type']}';
+                          AppRouter.router.pop();
                           AppRouter.router.go(url);
                         },
                       ),
