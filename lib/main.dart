@@ -20,47 +20,47 @@ class MyApp extends StatelessWidget {
     return FutureProvider(
       create: (_) => Api.load(),
       initialData: null,
-      builder: (BuildContext c, __) {
-        var api = c.read<Api?>();
-        if (api == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+      child: Consumer<Api?>(
+        builder: (context, api, child) {
+          if (api == null) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-        return MultiProvider(
-          providers: [
-            FutureProvider(
-              initialData: null,
-              create: (_) => AuthState.load(api),
-            ),
-            FutureProvider(
-              initialData: null,
-              create: (_) async {
-                var prefs = await SharedPreferences.getInstance();
-                return AppState(api: api, prefs: prefs);
+          return MultiProvider(
+            providers: [
+              FutureProvider(
+                initialData: null,
+                create: (_) => AuthState.load(api),
+              ),
+              FutureProvider(
+                initialData: null,
+                create: (_) async {
+                  var prefs = await SharedPreferences.getInstance();
+                  return AppState(api: api, prefs: prefs);
+                },
+              ),
+            ],
+            child: Consumer2<AuthState?, AppState?>(
+              builder: (context, authState, appState, child) {
+                if (appState == null || authState == null) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return MaterialApp.router(
+                  title: 'Our home',
+                  debugShowCheckedModeBanner: false,
+                  theme: appTheme,
+                  routerConfig: AppRouter.router,
+                );
               },
             ),
-          ],
-          builder: (context, child) {
-            var appState = context.read<AppState?>();
-            var authState = context.read<AuthState?>();
-
-            if (appState == null || authState == null) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            return MaterialApp.router(
-              routerConfig: AppRouter.router,
-              title: 'Our home',
-              debugShowCheckedModeBanner: false,
-              theme: appTheme,
-            );
-          },
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
