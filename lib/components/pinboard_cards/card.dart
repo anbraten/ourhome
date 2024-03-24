@@ -15,6 +15,7 @@ class PinboardCard extends StatelessWidget {
 
     return Card(
       child: ListTile(
+        textColor: Colors.white,
         title: Text('${post.type} by ${post.author} ${post.id}'),
         subtitle: Text(post.data.toString()),
       ),

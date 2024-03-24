@@ -5,7 +5,7 @@ import 'package:ourhome/components/pinboard_cards/card.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:pocketbase/pocketbase.dart';
-import 'package:ourhome/helpers/post_types.dart';
+import 'package:ourhome/types/post_type.dart';
 
 class ShareScreen extends StatefulWidget {
   final String shareId;
@@ -64,7 +64,7 @@ class _ShareScreenState extends State<ShareScreen>
     var api = Api.of(context);
     api.pb.collection('posts').subscribe('*', (RecordSubscriptionEvent event) {
       if (event.record == null) {
-        throw Exception('Record is null');
+        return;
       }
       final post = Post.fromRecordModel(event.record!);
       if (post.share != widget.shareId) {
@@ -203,7 +203,7 @@ class CreatePost extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Create new post',
+                          'Create new',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
@@ -228,7 +228,7 @@ class CreatePost extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
-                          backgroundColor: e['color'],
+                          backgroundColor: e.color,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -236,10 +236,10 @@ class CreatePost extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(e['icon'], size: 48, color: Colors.white),
+                            Icon(e.icon, size: 48, color: Colors.white),
                             const SizedBox(height: 8),
                             Text(
-                              e['text'],
+                              e.text,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   color: Colors.white, fontSize: 12),
@@ -247,8 +247,9 @@ class CreatePost extends StatelessWidget {
                           ],
                         ),
                         onPressed: () {
-                          var url = '/shares/$shareId/create/${e['type']}';
-                          AppRouter.router.pop();
+                          var url = '/shares/$shareId/create/${e.type}';
+                          AppRouter.router
+                              .pop(); // Close the dialog before navigating
                           AppRouter.router.go(url);
                         },
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
 import 'package:ourhome/types/share.dart';
+import 'package:ourhome/types/user.dart';
 import 'package:pocketbase/pocketbase.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,7 @@ class AppState extends ChangeNotifier {
   Api api;
   SharedPreferences prefs;
   Share? share;
+  List<User>? shareMembers;
 
   AppState({required this.api, required this.prefs});
 
@@ -16,12 +18,7 @@ class AppState extends ChangeNotifier {
     if (record == null) {
       share = null;
       prefs.remove('lastOpenedShare');
-    } else {
-      share = Share.fromRecordModel(record);
-      prefs.setString('lastOpenedShare', share!.id);
-    }
-
-    notifyListeners();
+    } else {}
   }
 
   Future<Share> loadShare(String shareId) async {
@@ -34,21 +31,18 @@ class AppState extends ChangeNotifier {
     }
 
     var response = await api.pb.collection('shares').getOne(shareId);
-    setShare(response);
+    var _share = Share.fromRecordModel(response);
+    shareMembers = (await Future.wait(
+            _share.members.map((e) => api.pb.collection("users").getOne(e))))
+        .map((e) => User.fromRecordModel(e))
+        .toList();
 
-    api.pb.collection('shares').subscribe(shareId, (e) {
-      setShare(e.record);
-    });
+    prefs.setString('lastOpenedShare', _share.id);
+    share = _share;
+
+    notifyListeners();
 
     return share!;
-  }
-
-  @override
-  void dispose() {
-    if (share != null) {
-      api.pb.collection('shares').unsubscribe(share!.id);
-    }
-    super.dispose();
   }
 
   static AppState of(BuildContext context) {

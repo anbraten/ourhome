@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
+import 'package:ourhome/components/expense/pinboard_card.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/states/auth.dart';
+import 'package:ourhome/types/user.dart';
 
 class CreatePostExpenseScreen extends StatefulWidget {
   final String shareId;
@@ -23,6 +25,7 @@ class _CreatePostExpenseState extends State<CreatePostExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     var appState = AppState.of(context);
+    var authState = AuthState.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,18 +45,48 @@ class _CreatePostExpenseState extends State<CreatePostExpenseScreen> {
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Amount'),
                   controller: amountController,
+                  keyboardType: TextInputType.number,
                 ),
-                TextFormField(
+                DropdownButtonFormField<Currency>(
                   decoration: const InputDecoration(labelText: 'Currency'),
-                  controller: currencyController,
+                  items: currencies
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.name),
+                          ))
+                      .toList(),
+                  value: currencies.first,
+                  onChanged: (value) {
+                    currencyController.text = value!.code;
+                  },
                 ),
-                TextFormField(
+                DropdownButtonFormField<User>(
                   decoration: const InputDecoration(labelText: 'Paid by'),
-                  controller: paidByController,
+                  items: (appState.shareMembers ?? [])
+                      .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e.name),
+                          ))
+                      .toList(),
+                  value: appState.shareMembers?.firstWhere(
+                      (element) => element.id == authState.user?.id),
+                  onChanged: (value) {
+                    paidByController.text = value!.id;
+                  },
                 ),
-                TextFormField(
-                  decoration: const InputDecoration(labelText: 'Paid for'),
+                DropdownMenu<User>(
+                  label: const Text('Paid for'),
+                  expandedInsets: const EdgeInsets.symmetric(vertical: 5.0),
                   controller: paidForController,
+                  inputDecorationTheme: const InputDecorationTheme(
+                    contentPadding: EdgeInsets.symmetric(vertical: 5.0),
+                  ),
+                  dropdownMenuEntries: (appState.shareMembers ?? [])
+                      .map((e) => DropdownMenuEntry(
+                            value: e,
+                            label: e.name,
+                          ))
+                      .toList(),
                 ),
               ]),
               const SizedBox(height: 20),
@@ -67,15 +100,18 @@ class _CreatePostExpenseState extends State<CreatePostExpenseScreen> {
                     return;
                   }
 
-                  // TODO: run action for specific postType
-                  var user = AuthState.of(context).user;
-                  await Api.of(context).pb.collection('posts').create(body: {
-                    'type': 'expense',
-                    'share': widget.shareId,
-                    'author': user?.id,
-                    'data':
-                        '{"title": "${titleController.text}", "date": "${DateTime.now().toIso8601String()}", "amount": ${amountController.text}, "currency": "${currencyController.text}", "paidBy": "${paidByController.text}", "paidFor": ["${paidForController.text}"]}',
-                  });
+                  ExpenseData expenseData = ExpenseData(
+                    title: titleController.text,
+                    date: DateTime.now(),
+                    currency: currencyController.text,
+                    paidBy: [],
+                    paidFor: [],
+                  );
+
+                  await Api.of(context)
+                      .pb
+                      .collection('posts')
+                      .create(body: expenseData.toJson());
                   AppRouter.router.pop();
                 },
               ),

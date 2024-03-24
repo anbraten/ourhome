@@ -101,7 +101,8 @@ class _ShareFinancesScreenState extends State<ShareFinancesScreen> {
               }).toList();
 
               var toPay = memberExpenses.fold(0.0, (prev, expense) {
-                return prev - (expense.amount / expense.paidFor.length);
+                return prev -
+                    (expense.paidBy.first.amount / expense.paidFor.length);
               });
 
               return Card(
