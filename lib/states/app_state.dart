@@ -45,7 +45,9 @@ class AppState extends ChangeNotifier {
 
   @override
   void dispose() {
-    // loginInfo.removeListener(loginChange);
+    if (share != null) {
+      api.pb.collection('shares').unsubscribe(share!.id);
+    }
     super.dispose();
   }
 
