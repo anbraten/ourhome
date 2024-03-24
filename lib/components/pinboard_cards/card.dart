@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ourhome/components/expense/pinboard_card.dart';
+import 'package:ourhome/components/expense/card.dart';
+import 'package:ourhome/components/note/card.dart';
+import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/types/post.dart';
 
 class PinboardCard extends StatelessWidget {
@@ -13,10 +15,18 @@ class PinboardCard extends StatelessWidget {
       return ExpenseCard.fromPost(post);
     }
 
+    if (post.type == 'note') {
+      return NoteCard.fromPost(post);
+    }
+
+    var appState = AppState.of(context);
+    var author = appState.shareMembers
+        ?.firstWhere((element) => element.id == post.authorId);
+
     return Card(
       child: ListTile(
         textColor: Colors.white,
-        title: Text('${post.type} by ${post.author} ${post.id}'),
+        title: Text('${post.type} by ${author?.name ?? '---'} ${post.id}'),
         subtitle: Text(post.data.toString()),
       ),
     );

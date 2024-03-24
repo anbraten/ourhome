@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ourhome/components/expense/create.dart';
+import 'package:ourhome/components/note/create.dart';
 import 'package:ourhome/pages/auth/register.dart';
 import 'package:ourhome/pages/not_found.dart';
 import 'package:ourhome/pages/auth/login.dart';
@@ -72,6 +73,12 @@ class AppRouter {
                 GoRoute(
                   path: 'create/expense',
                   builder: (context, state) => CreatePostExpenseScreen(
+                      key: state.pageKey,
+                      shareId: state.pathParameters['shareId']!),
+                ),
+                GoRoute(
+                  path: 'create/note',
+                  builder: (context, state) => CreatePostNoteScreen(
                       key: state.pageKey,
                       shareId: state.pathParameters['shareId']!),
                 ),

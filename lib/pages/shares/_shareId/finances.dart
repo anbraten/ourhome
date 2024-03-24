@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-import 'package:ourhome/components/expense/pinboard_card.dart';
+import 'package:ourhome/components/expense/types.dart';
 import 'package:ourhome/components/layout/share_scaffold.dart';
 import 'package:ourhome/types/post.dart';
 import 'package:pocketbase/pocketbase.dart';

@@ -51,6 +51,7 @@ class ShareScaffold extends StatelessWidget {
             onDestinationSelected: (int index) {
               AppRouter.router.go(routes[index]);
             },
+            indicatorColor: Colors.green[200],
             selectedIndex: selectedIndex,
             destinations: const [
               NavigationDestination(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ourhome/api.dart';
-import 'package:ourhome/components/expense/pinboard_card.dart';
+import 'package:ourhome/components/expense/types.dart';
 import 'package:ourhome/routes/router.dart';
 import 'package:ourhome/states/app_state.dart';
 import 'package:ourhome/states/auth.dart';
@@ -108,10 +108,12 @@ class _CreatePostExpenseState extends State<CreatePostExpenseScreen> {
                     paidFor: [],
                   );
 
-                  await Api.of(context)
-                      .pb
-                      .collection('posts')
-                      .create(body: expenseData.toJson());
+                  await Api.of(context).pb.collection('posts').create(body: {
+                    'share': widget.shareId,
+                    'author': authState.user?.id,
+                    'type': 'expense',
+                    'data': expenseData.toJson(),
+                  });
                   AppRouter.router.pop();
                 },
               ),
