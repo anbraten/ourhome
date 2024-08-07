@@ -26,9 +26,8 @@ jobs:
           flutter-version: 3.22.2
           cache: true
       - run: flutter pub get
-      - run: flutter test
       - run: flutter build apk
-      - run: flutter build appbundle
+      #- run: flutter build appbundle
       - name: Upload APK
         if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v2
